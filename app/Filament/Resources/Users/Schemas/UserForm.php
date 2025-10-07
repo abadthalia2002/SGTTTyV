@@ -14,21 +14,27 @@ class UserForm
         return $schema
             ->components([
                 TextInput::make('document_number')
+                    ->label('Número de Documento')
                     ->required(),
                 TextInput::make('name')
+                    ->label('Nombres y Apellidos')
                     ->required(),
                 TextInput::make('email')
-                    ->label('Email address')
+                    ->label('Email')
                     ->email()
                     ->required(),
-                DateTimePicker::make('email_verified_at'),
+                DateTimePicker::make('email_verified_at')->label('Email Verificado'),
                 TextInput::make('password')
+                    ->label('Contraseña')
                     ->password()
                     ->required(),
-                TextInput::make('address'),
+                TextInput::make('address')
+                    ->label('Dirección'),
                 TextInput::make('phone')
+                    ->label('Teléfono')
                     ->tel(),
                 FileUpload::make('image')
+                    ->label('Foto')
                     ->image(),
             ]);
     }

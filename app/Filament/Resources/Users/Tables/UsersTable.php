@@ -17,25 +17,33 @@ class UsersTable
         return $table
             ->columns([
                 TextColumn::make('document_number')
+                    ->label('Número de Documento')
                     ->searchable(),
                 TextColumn::make('name')
+                    ->label('Nombres y Apellidos')
                     ->searchable(),
                 TextColumn::make('email')
-                    ->label('Email address')
+                    ->label('Email')
                     ->searchable(),
                 TextColumn::make('email_verified_at')
+                    ->label('Email Verificado')
                     ->dateTime()
                     ->sortable(),
                 TextColumn::make('address')
+                    ->label('Dirección')
                     ->searchable(),
                 TextColumn::make('phone')
+                    ->label('Teléfono')
                     ->searchable(),
-                ImageColumn::make('image'),
+                ImageColumn::make('image')
+                    ->label('Foto'),
                 TextColumn::make('created_at')
+                    ->label('Fecha de Creación')
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
                 TextColumn::make('updated_at')
+                    ->label('Fecha de Actualización')
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
