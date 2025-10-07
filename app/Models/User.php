@@ -4,6 +4,7 @@ namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
@@ -18,9 +19,14 @@ class User extends Authenticatable
      * @var list<string>
      */
     protected $fillable = [
+        'document_type_id',
+        'document_number',
         'name',
         'email',
         'password',
+        'address',
+        'phone',
+        'image',
     ];
 
     /**
@@ -44,5 +50,10 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+    public function documentType(): BelongsTo
+    {
+        return $this->belongsTo(DocumentType::class);
     }
 }
