@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::create('infractions', function (Blueprint $table) {
             $table->id();
+            $table->string('target');
             $table->string('code')->unique();
             $table->text('description');    
             $table->string('type');          

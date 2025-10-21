@@ -16,13 +16,17 @@ class InfractionsTable
         return $table
             ->columns([
                 TextColumn::make('code')
+                    ->label('Código')
                     ->searchable(),
                 TextColumn::make('type')
+                    ->label('Tipo')
                     ->searchable(),
                 TextColumn::make('sanction_percentage')
+                    ->label('Porcentaje de sanción')
                     ->numeric()
                     ->sortable(),
                 TextColumn::make('complementary_measure')
+                    ->label('Medida complementaria')
                     ->searchable(),
                 TextColumn::make('created_at')
                     ->dateTime()

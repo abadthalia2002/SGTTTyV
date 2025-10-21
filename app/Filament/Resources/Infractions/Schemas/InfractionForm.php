@@ -2,6 +2,9 @@
 
 namespace App\Filament\Resources\Infractions\Schemas;
 
+use App\Enums\TargetInfractionEnum;
+use App\Enums\TypeInfractionEnum;
+use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Textarea;
 use Filament\Schemas\Schema;
@@ -12,14 +15,23 @@ class InfractionForm
     {
         return $schema
             ->components([
+                Select::make('target')
+                    ->options(TargetInfractionEnum::class)
+                    ->label('Dirigir a')
+                    ->native(false)
+                    ->required(),
                 TextInput::make('code')
+                    ->label('Código')
                     ->required(),
                 Textarea::make('description')
                     ->required()
+                     ->label('Descripción')
                     ->columnSpanFull(),
-                TextInput::make('type')
-                    ->required(),
+                Select::make('type')
+                    ->options(TypeInfractionEnum::class)
+                    ->label('Tipo'),
                 TextInput::make('sanction_percentage')
+                    ->label('Porcentaje de sanción')
                     ->required()
                     ->numeric(),
                 TextInput::make('complementary_measure'),
