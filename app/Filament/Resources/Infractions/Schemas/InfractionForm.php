@@ -34,7 +34,8 @@ class InfractionForm
                     ->label('Porcentaje de sanción')
                     ->required()
                     ->numeric(),
-                TextInput::make('complementary_measure'),
+                Textarea::make('complementary_measure')
+                    ->label('Medida complementaria'),
             ]);
     }
 }
