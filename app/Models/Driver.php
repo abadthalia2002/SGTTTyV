@@ -9,6 +9,8 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
 class Driver extends Model
 {
     protected $fillable = [
+        'document_type_id',
+        'document_number',
         'name',
         'surname',
         'dni',
