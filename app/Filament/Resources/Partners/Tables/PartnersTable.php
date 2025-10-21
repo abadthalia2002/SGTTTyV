@@ -27,7 +27,8 @@ class PartnersTable
                     ->searchable(),
                 TextColumn::make('address')
                     ->label('Direccion')
-                    ->searchable(),
+                    ->searchable()
+                    ->toggleable(isToggledHiddenByDefault: true),
                 TextColumn::make('phone')
                     ->label('Nº de Telefono')
                     ->searchable(),
@@ -36,6 +37,9 @@ class PartnersTable
                     ->searchable(),
                 TextColumn::make('civil_status')
                     ->label('Estado Civil')
+                    ->searchable(),
+                TextColumn::make('transportAssociation.name')
+                    ->label('Asociación de Transporte')
                     ->searchable(),
                 TextColumn::make('created_at')
                     ->dateTime()

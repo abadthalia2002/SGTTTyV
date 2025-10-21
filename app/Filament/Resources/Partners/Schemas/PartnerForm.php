@@ -87,6 +87,13 @@ class PartnerForm
                         ->toArray())
                     ->required()
                     ->native(false),
+
+                Select::make('transport_association_id')
+                    ->label('Asociación de Transporte')
+                    ->relationship('transportAssociation', 'name')
+                    ->searchable()
+                    ->preload()
+                    ->reactive(),
             ]);
     }
 }
