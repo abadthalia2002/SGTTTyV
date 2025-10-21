@@ -16,6 +16,7 @@ class Partner extends Model
         'phone',
         'email',
         'civil_status',
+        'transport_association_id',
     ];
     
 
@@ -26,5 +27,10 @@ class Partner extends Model
     public function documentType(): BelongsTo
     {
         return $this->belongsTo(DocumentType::class);
+    }
+
+    public function transportAssociation(): BelongsTo
+    {
+        return $this->belongsTo(TransportAssociation::class);
     }
 }

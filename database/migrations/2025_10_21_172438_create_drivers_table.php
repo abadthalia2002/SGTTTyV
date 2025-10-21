@@ -11,13 +11,14 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('transport_associations', function (Blueprint $table) {
+        Schema::create('drivers', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('document_type_id')->nullable()->constrained();
             $table->string('document_number');
             $table->string('name');
-            $table->text('description')->nullable();
-            $table->text('location')->nullable();
-            $table->foreignId('partner_id')->nullable()->constrained('partners');
+            $table->string('license_number')->unique();
+            $table->string('license_type');
+            $table->foreignId('transport_association_id')->nullable()->constrained();
             $table->timestamps();
         });
     }
@@ -27,6 +28,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('transport_associations');
+        Schema::dropIfExists('drivers');
     }
 };

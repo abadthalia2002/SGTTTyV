@@ -57,18 +57,27 @@ class PartnerForm
                         return ($min && $max)
                             ? "Debe tener entre {$min} y {$max} caracteres."
                             : null;
-                    }),
+                    })->validationMessages([
+                        'regex' => 'El número de documento no cumple con el formato requerido.',
+                        'min_digits' => 'El número de documento debe tener como minimo :min dígitos.',
+                        'max_digits' => 'El número de documento debe tener como máximo :max dígitos.',
+                        'max' => 'El número de documento no puede tener más de :max dígitos.',
+                        'min' => 'El número de documento no puede tener menos de :min dígitos.',
+                    ]),
 
                 TextInput::make('number_min_length')->hidden(),
                 TextInput::make('number_max_length')->hidden(),
                 TextInput::make('number_regex')->hidden(),
                 TextInput::make('name')
+                    ->label('Nombres y Apellidos')
                     ->required(),
-                TextInput::make('address'),
+                TextInput::make('address')
+                    ->label('Dirección'),
                 TextInput::make('phone')
+                    ->label('Número de Teléfono')
                     ->tel(),
                 TextInput::make('email')
-                    ->label('Email address')
+                    ->label('Correo Electrónico')
                     ->email(),
 
                 Select::make('civil_status')
@@ -78,6 +87,13 @@ class PartnerForm
                         ->toArray())
                     ->required()
                     ->native(false),
+
+                Select::make('transport_association_id')
+                    ->label('Asociación de Transporte')
+                    ->relationship('transportAssociation', 'name')
+                    ->searchable()
+                    ->preload()
+                    ->reactive(),
             ]);
     }
 }

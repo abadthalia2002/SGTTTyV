@@ -25,6 +25,9 @@ class PartnerInfolist
                     ->placeholder('-'),
                 TextEntry::make('civil_status')
                     ->placeholder('-'),
+                TextEntry::make('transportAssociation.name')
+                    ->label('Asociación de Transporte')
+                    ->placeholder('-'),
                 TextEntry::make('created_at')
                     ->dateTime()
                     ->placeholder('-'),
