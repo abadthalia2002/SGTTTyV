@@ -24,10 +24,9 @@ class PartnerResource extends Resource
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedUserGroup;
 
-     protected static string|UnitEnum|null $navigationGroup = 'Gestión de Asociaciones';
+    protected static string|UnitEnum|null $navigationGroup = 'Gestión de Asociaciones';
 
-
-     protected static ?string $navigationLabel = 'Socios';
+    protected static ?string $navigationLabel = 'Socios';
 
     protected static ?string $pluralLabel = 'Socios';
 

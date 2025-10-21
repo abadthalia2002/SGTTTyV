@@ -27,6 +27,12 @@ class DriverResource extends Resource
 
     protected static ?string $recordTitleAttribute = 'Conductor';
 
+      protected static ?string $navigationLabel = 'Conductores';
+
+    protected static ?string $pluralLabel = 'Conductores';
+
+    protected static ?string $modelLabel = 'Conductor';
+
     protected static ?int $navigationSort = 4;
 
     public static function form(Schema $schema): Schema

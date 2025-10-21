@@ -25,7 +25,13 @@ class VehicleResource extends Resource
 
     protected static string|UnitEnum|null $navigationGroup = 'Gestión de Asociaciones';
 
-    protected static ?string $recordTitleAttribute = 'Vehiculo';
+    protected static ?string $recordTitleAttribute = 'Vehículo';
+
+    protected static ?string $navigationLabel = 'Vehículos';
+
+    protected static ?string $pluralLabel = 'Vehículos';
+
+    protected static ?string $modelLabel = 'Vehículo';
 
     protected static ?int $navigationSort = 3;
 
