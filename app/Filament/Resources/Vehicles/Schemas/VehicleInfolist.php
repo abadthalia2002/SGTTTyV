@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\Vehicles\Schemas;
 
+use Filament\Infolists\Components\TextEntry;
 use Filament\Schemas\Schema;
 
 class VehicleInfolist
@@ -10,7 +11,24 @@ class VehicleInfolist
     {
         return $schema
             ->components([
-                //
+                TextEntry::make('plate'),
+                TextEntry::make('brand'),
+                TextEntry::make('model'),
+                TextEntry::make('type'),
+                TextEntry::make('partner.name')
+                    ->label('Partner')
+                    ->placeholder('-'),
+                TextEntry::make('driver.name')
+                    ->label('Driver')
+                    ->placeholder('-'),
+                TextEntry::make('transportAssociation.name')
+                    ->label('Transport association'),
+                TextEntry::make('created_at')
+                    ->dateTime()
+                    ->placeholder('-'),
+                TextEntry::make('updated_at')
+                    ->dateTime()
+                    ->placeholder('-'),
             ]);
     }
 }

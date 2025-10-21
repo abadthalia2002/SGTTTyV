@@ -6,6 +6,7 @@ use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
 use Filament\Actions\ViewAction;
+use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 
 class VehiclesTable
@@ -14,7 +15,28 @@ class VehiclesTable
     {
         return $table
             ->columns([
-                //
+                TextColumn::make('plate')
+                    ->searchable(),
+                TextColumn::make('brand')
+                    ->searchable(),
+                TextColumn::make('model')
+                    ->searchable(),
+                TextColumn::make('type')
+                    ->searchable(),
+                TextColumn::make('partner.name')
+                    ->searchable(),
+                TextColumn::make('driver.name')
+                    ->searchable(),
+                TextColumn::make('transportAssociation.name')
+                    ->searchable(),
+                TextColumn::make('created_at')
+                    ->dateTime()
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: true),
+                TextColumn::make('updated_at')
+                    ->dateTime()
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
                 //

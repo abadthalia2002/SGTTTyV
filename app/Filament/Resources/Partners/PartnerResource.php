@@ -33,6 +33,8 @@ class PartnerResource extends Resource
 
     protected static ?string $modelLabel = 'Socio';
 
+    protected static ?int $navigationSort = 2;
+
     public static function form(Schema $schema): Schema
     {
         return PartnerForm::configure($schema);
