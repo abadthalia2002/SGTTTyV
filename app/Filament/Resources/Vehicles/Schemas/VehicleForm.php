@@ -34,12 +34,10 @@ class VehicleForm
                     ->searchable()
                     ->native(false)
                     ->relationship('driver', 'name'),
-                Select::make('transport_association_id')
+               Select::make('transport_association_id')
                     ->label('Asociación de Transporte')
-                    ->searchable()
                     ->native(false)
-                    ->relationship('transportAssociation', 'name')
-                    ->required(),
+                    ->relationship('transportAssociation', 'name'),
             ]);
     }
 }
