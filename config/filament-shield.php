@@ -145,7 +145,7 @@ return [
     */
 
     'localization' => [
-        'enabled' => false,
+        'enabled' => true,
         'key' => 'filament-shield::filament-shield',
     ],
 
@@ -257,5 +257,7 @@ return [
     */
 
     'register_role_policy' => true,
+
+    
 
 ];

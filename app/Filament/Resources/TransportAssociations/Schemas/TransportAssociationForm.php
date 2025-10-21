@@ -14,14 +14,19 @@ class TransportAssociationForm
         return $schema
             ->components([
                 TextInput::make('document_number')
+                    ->label('Número de Documento')
                     ->required(),
                 TextInput::make('name')
+                    ->label('Nombre de la Asociación')
                     ->required(),
                 Textarea::make('description')
+                    ->label('Descripción')
                     ->columnSpanFull(),
                 Textarea::make('location')
+                    ->label('Dirección')
                     ->columnSpanFull(),
                 Select::make('partner_id')
+                    ->label('Presidente de la Asociación')
                     ->relationship('partner', 'name')
                     ->required()
             ]);
