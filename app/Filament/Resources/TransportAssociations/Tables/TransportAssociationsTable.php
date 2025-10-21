@@ -16,10 +16,13 @@ class TransportAssociationsTable
         return $table
             ->columns([
                 TextColumn::make('document_number')
+                    ->label('Número de Documento')
                     ->searchable(),
                 TextColumn::make('name')
+                    ->label('Nombre de la Asociación')
                     ->searchable(),
                 TextColumn::make('partner_id')
+                    ->label('Socio Id')
                     ->numeric()
                     ->sortable(),
                 TextColumn::make('created_at')

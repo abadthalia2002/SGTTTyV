@@ -25,6 +25,13 @@ class TransportAssociationResource extends Resource
 
     protected static string|UnitEnum|null $navigationGroup = 'Gestión de Asociaciones';
 
+     protected static ?string $navigationLabel = 'Asociaciones de Transporte';
+
+    protected static ?string $pluralLabel = 'Asociaciones de Transporte';
+
+    protected static ?string $modelLabel = 'Asociación de Transporte';
+
+     protected static ?int $navigationSort = 2;
 
     public static function form(Schema $schema): Schema
     {

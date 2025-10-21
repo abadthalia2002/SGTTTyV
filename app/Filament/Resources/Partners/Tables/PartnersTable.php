@@ -16,20 +16,26 @@ class PartnersTable
         return $table
             ->columns([
                 TextColumn::make('document_type_id')
+                    ->label('Tipo de Documento')
                     ->numeric()
                     ->sortable(),
                 TextColumn::make('document_number')
+                    ->label('Numero de Documento')
                     ->searchable(),
                 TextColumn::make('name')
+                    ->label('Nombre')
                     ->searchable(),
                 TextColumn::make('address')
+                    ->label('Direccion')
                     ->searchable(),
                 TextColumn::make('phone')
+                    ->label('Nº de Telefono')
                     ->searchable(),
                 TextColumn::make('email')
-                    ->label('Email address')
+                    ->label('Email')
                     ->searchable(),
                 TextColumn::make('civil_status')
+                    ->label('Estado Civil')
                     ->searchable(),
                 TextColumn::make('created_at')
                     ->dateTime()
