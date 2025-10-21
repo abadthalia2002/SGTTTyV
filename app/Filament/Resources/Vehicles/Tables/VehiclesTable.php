@@ -16,18 +16,25 @@ class VehiclesTable
         return $table
             ->columns([
                 TextColumn::make('plate')
+                    ->label('Número de Placa')
                     ->searchable(),
                 TextColumn::make('brand')
+                    ->label('Marca')
                     ->searchable(),
                 TextColumn::make('model')
+                    ->label('Modelo')
                     ->searchable(),
                 TextColumn::make('type')
+                    ->label('Tipo de Vehículo')
                     ->searchable(),
                 TextColumn::make('partner.name')
+                    ->label('Propietario')
                     ->searchable(),
                 TextColumn::make('driver.name')
+                    ->label('Conductor')
                     ->searchable(),
                 TextColumn::make('transportAssociation.name')
+                    ->label('Asociación de Transporte')
                     ->searchable(),
                 TextColumn::make('created_at')
                     ->dateTime()

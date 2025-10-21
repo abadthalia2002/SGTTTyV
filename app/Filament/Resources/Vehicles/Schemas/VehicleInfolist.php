@@ -11,18 +11,22 @@ class VehicleInfolist
     {
         return $schema
             ->components([
-                TextEntry::make('plate'),
-                TextEntry::make('brand'),
-                TextEntry::make('model'),
-                TextEntry::make('type'),
+                TextEntry::make('plate')
+                 ->label('Número de Placa'),
+                TextEntry::make('brand')
+                 ->label('Marca'),
+                TextEntry::make('model')
+                 ->label('Modelo'),
+                TextEntry::make('type')
+                 ->label('Tipo de Vehículo'),
                 TextEntry::make('partner.name')
-                    ->label('Partner')
+                    ->label('Propietario')
                     ->placeholder('-'),
                 TextEntry::make('driver.name')
-                    ->label('Driver')
+                    ->label('Conductor')
                     ->placeholder('-'),
                 TextEntry::make('transportAssociation.name')
-                    ->label('Transport association'),
+                    ->label('Asociación de Transporte'),
                 TextEntry::make('created_at')
                     ->dateTime()
                     ->placeholder('-'),
