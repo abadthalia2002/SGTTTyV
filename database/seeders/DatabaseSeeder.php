@@ -7,6 +7,8 @@ use App\Models\User;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
+use Spatie\Permission\Models\Permission;
+use Spatie\Permission\Models\Role;
 
 class DatabaseSeeder extends Seeder
 {
@@ -46,11 +48,20 @@ class DatabaseSeeder extends Seeder
             'number_regex' => ValidationPatterns::NUMBERS_LETTERS_SPACES
         ]);
 
-        User::factory()->create([
+        $user = User::factory()->create([
             'document_number' => '12345678',
             'name' => 'Thalia Abad',
             'email' => 'thalia@gmail.com',
             'password' => Hash::make('password'),
         ]);
+
+        $admin = Role::firstOrCreate(['name' => 'Administrador']);
+        $permissions = Permission::all();
+
+        $admin->syncPermissions($permissions);
+
+        if ($user) {
+             $user->assignRole($admin);
+        }
     }
 }
