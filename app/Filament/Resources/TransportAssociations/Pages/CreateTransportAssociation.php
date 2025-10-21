@@ -8,4 +8,9 @@ use Filament\Resources\Pages\CreateRecord;
 class CreateTransportAssociation extends CreateRecord
 {
     protected static string $resource = TransportAssociationResource::class;
+
+    protected function getRedirectUrl(): string
+    {
+        return $this->getResource()::getUrl('index');
+    }
 }

@@ -21,8 +21,11 @@ class TransportAssociationsTable
                 TextColumn::make('name')
                     ->label('Nombre de la Asociación')
                     ->searchable(),
-                TextColumn::make('partner_id')
-                    ->label('Socio Id')
+                TextColumn::make('location')
+                    ->label('Dirección')
+                    ->searchable(),
+                TextColumn::make('partner.name')
+                    ->label('Representante Legal')
                     ->numeric()
                     ->sortable(),
                 TextColumn::make('created_at')
