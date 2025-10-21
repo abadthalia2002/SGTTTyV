@@ -12,14 +12,23 @@ class DriverInfolist
         return $schema
             ->components([
                 TextEntry::make('document_type_id')
+                    ->label('Tipo de Documento')    
                     ->numeric()
                     ->placeholder('-'),
-                TextEntry::make('document_number'),
-                TextEntry::make('name'),
-                TextEntry::make('license_number'),
-                TextEntry::make('license_type'),
+                TextEntry::make('document_number')
+                    ->label('Número de Documento')
+                    ->placeholder('-'),
+                TextEntry::make('name')
+                    ->label('Nombres y Apellidos')
+                    ->placeholder('-'),
+                TextEntry::make('license_number')
+                    ->label('Número de Licencia')
+                    ->placeholder('-'),
+                TextEntry::make('license_type')
+                    ->label('Tipo de Licencia')
+                    ->placeholder('-'),
                 TextEntry::make('transportAssociation.name')
-                    ->label('Transport association')
+                    ->label('Asociación de Transporte')
                     ->placeholder('-'),
                 TextEntry::make('created_at')
                     ->dateTime()

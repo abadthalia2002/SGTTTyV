@@ -17,6 +17,11 @@ class Driver extends Model
         'transport_association_id',
     ];
 
+    public function documentType(): BelongsTo
+    {
+        return $this->belongsTo(DocumentType::class);
+    }
+
     public function transportAssociation(): BelongsTo
     {
         return $this->belongsTo(TransportAssociation::class);
