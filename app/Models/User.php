@@ -3,15 +3,18 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+
+use Filament\Models\Contracts\FilamentUser;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Spatie\Permission\Traits\HasRoles;
 
-class User extends Authenticatable
+class User extends Authenticatable implements FilamentUser
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
-    use HasFactory, Notifiable;
+    use HasRoles,HasFactory, Notifiable;
 
     /**
      * The attributes that are mass assignable.
@@ -27,6 +30,7 @@ class User extends Authenticatable
         'address',
         'phone',
         'image',
+        'is_active',
     ];
 
     /**
@@ -49,11 +53,28 @@ class User extends Authenticatable
         return [
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
+            'is_active' => 'boolean',
         ];
     }
 
     public function documentType(): BelongsTo
     {
         return $this->belongsTo(DocumentType::class);
+    }
+
+    public function isActive(): bool
+    {
+        return $this->is_active;
+    }
+
+    public function toggleActive(bool $condition): void
+    {
+        $this->is_active = $condition;
+        $this->save();
+    }
+
+    public function canAccessPanel(\Filament\Panel $panel): bool
+    {
+        return $this->is_active;
     }
 }
