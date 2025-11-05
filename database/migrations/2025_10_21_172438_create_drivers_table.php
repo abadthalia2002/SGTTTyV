@@ -18,6 +18,7 @@ return new class extends Migration
             $table->string('name');
             $table->string('license_number')->unique();
             $table->string('license_type');
+            $table->foreignId('partner_id')->nullable()->constrained();
             $table->foreignId('transport_association_id')->nullable()->constrained();
             $table->timestamps();
         });
