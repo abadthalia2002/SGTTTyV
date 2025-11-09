@@ -28,16 +28,19 @@ class VehicleForm
                     ->label('Propietario')
                     ->searchable()
                     ->native(false)
-                    ->relationship('partner', 'name'),
+                    ->relationship('partner', 'name')
+                    ->preload(),
                 Select::make('driver_id')
                     ->label('Conductor')
                     ->searchable()
                     ->native(false)
+                    ->preload()
                     ->relationship('driver', 'name'),
                Select::make('transport_association_id')
                     ->label('Asociación de Transporte')
                     ->native(false)
-                    ->relationship('transportAssociation', 'name'),
+                    ->relationship('transportAssociation', 'name')
+                    ->preload(),
             ]);
     }
 }
