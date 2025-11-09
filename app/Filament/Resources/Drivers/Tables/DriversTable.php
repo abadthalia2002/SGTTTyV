@@ -15,10 +15,11 @@ class DriversTable
     {
         return $table
             ->columns([
-                TextColumn::make('document_type_id')
+                TextColumn::make('documentType.abbreviation')
                     ->label('Tipo de Documento')
-                    ->numeric()
-                    ->sortable(),
+                    ->sortable()
+                    ->searchable(),
+
                 TextColumn::make('document_number')
                     ->label('Número de Documento')
                     ->searchable(),

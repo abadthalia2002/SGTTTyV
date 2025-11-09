@@ -17,6 +17,7 @@ class Driver extends Model
         'license_number',
         'license_type',
         'transport_association_id',
+        'partner_id',
     ];
 
     public function documentType(): BelongsTo

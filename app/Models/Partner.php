@@ -33,4 +33,9 @@ class Partner extends Model
     {
         return $this->belongsTo(TransportAssociation::class);
     }
+
+    public function driver()
+    {
+        return $this->hasOne(Driver::class, 'partner_id');
+    }
 }

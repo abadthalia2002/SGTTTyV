@@ -15,10 +15,11 @@ class PartnersTable
     {
         return $table
             ->columns([
-                TextColumn::make('document_type_id')
+                TextColumn::make('documentType.abbreviation')
                     ->label('Tipo de Documento')
-                    ->numeric()
-                    ->sortable(),
+                    ->sortable()
+                    ->searchable(),
+
                 TextColumn::make('document_number')
                     ->label('Numero de Documento')
                     ->searchable(),
