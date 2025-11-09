@@ -6,6 +6,8 @@ use App\Filament\Resources\TransportAssociations\Pages\CreateTransportAssociatio
 use App\Filament\Resources\TransportAssociations\Pages\EditTransportAssociation;
 use App\Filament\Resources\TransportAssociations\Pages\ListTransportAssociations;
 use App\Filament\Resources\TransportAssociations\Pages\ViewTransportAssociation;
+use App\Filament\Resources\TransportAssociations\RelationManagers\DriversRelationManager;
+use App\Filament\Resources\TransportAssociations\RelationManagers\PartnersRelationManager;
 use App\Filament\Resources\TransportAssociations\Schemas\TransportAssociationForm;
 use App\Filament\Resources\TransportAssociations\Schemas\TransportAssociationInfolist;
 use App\Filament\Resources\TransportAssociations\Tables\TransportAssociationsTable;
@@ -25,13 +27,13 @@ class TransportAssociationResource extends Resource
 
     protected static string|UnitEnum|null $navigationGroup = 'Gestión de Asociaciones';
 
-     protected static ?string $navigationLabel = 'Asociaciones de Transporte';
+    protected static ?string $navigationLabel = 'Asociaciones de Transporte';
 
     protected static ?string $pluralLabel = 'Asociaciones de Transporte';
 
     protected static ?string $modelLabel = 'Asociación de Transporte';
 
-     protected static ?int $navigationSort = 1;
+    protected static ?int $navigationSort = 1;
 
     public static function form(Schema $schema): Schema
     {
@@ -51,7 +53,8 @@ class TransportAssociationResource extends Resource
     public static function getRelations(): array
     {
         return [
-            //
+            PartnersRelationManager::class,
+            DriversRelationManager::class,
         ];
     }
 

@@ -19,4 +19,14 @@ class TransportAssociation extends Model
     {
         return $this->belongsTo(Partner::class);
     }
+
+    public function partners()
+    {
+        return $this->hasMany(\App\Models\Partner::class);
+    }
+
+    public function drivers()
+    {
+        return $this->hasMany(\App\Models\Driver::class);
+    }
 }
