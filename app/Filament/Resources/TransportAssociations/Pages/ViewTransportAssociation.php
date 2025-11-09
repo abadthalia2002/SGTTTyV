@@ -30,32 +30,4 @@ class ViewTransportAssociation extends ViewRecord
             DriversRelationManager::class,
         ];
     }
-
-
-    /* protected function getInfolist(): array
-    {
-        return [
-            Tabs::make('Details')
-                ->tabs([
-                    Tab::make('Socios')
-                        ->schema([
-                            RepeatableEntry::make('partners')
-                                ->schema([
-                                    TextEntry::make('name')->label('Nombre'),
-                                    TextEntry::make('documentType.abbreviation')->label('Tipo Doc.'),
-                                    TextEntry::make('document_number')->label('N° Documento'),
-                                ]),
-                        ]),
-                    Tab::make('Conductores')
-                        ->schema([
-                            RepeatableEntry::make('drivers')
-                                ->schema([
-                                    TextEntry::make('name')->label('Nombre'),
-                                    TextEntry::make('license_number')->label('Licencia'),
-                                    TextEntry::make('license_type')->label('Tipo'),
-                                ]),
-                        ]),
-                ]),
-        ];
-    } */
 }
