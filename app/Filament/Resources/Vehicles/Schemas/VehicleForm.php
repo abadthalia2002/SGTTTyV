@@ -2,6 +2,8 @@
 
 namespace App\Filament\Resources\Vehicles\Schemas;
 
+use App\Models\Driver;
+use App\Models\Partner;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Schemas\Schema;
@@ -24,23 +26,54 @@ class VehicleForm
                 TextInput::make('type')
                     ->label('Tipo de Vehículo')
                     ->required(),
-                Select::make('partner_id')
-                    ->label('Propietario')
-                    ->searchable()
+                Select::make('transport_association_id')
+                    ->label('Asociación de Transporte')
+                    ->relationship('transportAssociation', 'name')
+                    ->required()
                     ->native(false)
-                    ->relationship('partner', 'name')
-                    ->preload(),
+                    ->searchable()
+                    ->preload()
+                    ->reactive(),
+
+
+                Select::make('partner_id')
+                    ->label('Propietario (Socio)')
+                    ->options(function (callable $get) {
+                        $associationId = $get('transport_association_id');
+
+                        if (!$associationId) {
+                            return [];
+                        }
+
+                        return Partner::where('transport_association_id', $associationId)
+                            ->pluck('name', 'id');
+                    })
+                    ->required()
+                    ->disabled(fn(callable $get) => !$get('transport_association_id'))
+                    ->native(false)
+                    ->searchable()
+                    ->preload()
+                    ->reactive(),
+
+
                 Select::make('driver_id')
                     ->label('Conductor')
+                    ->options(function (callable $get) {
+                        $associationId = $get('transport_association_id');
+
+                        if (!$associationId) {
+                            return [];
+                        }
+
+                        return Driver::where('transport_association_id', $associationId)
+                            ->pluck('name', 'id');
+                    })
+                    ->required()
+                    ->disabled(fn(callable $get) => !$get('transport_association_id'))
+                    ->native(false)
                     ->searchable()
-                    ->native(false)
                     ->preload()
-                    ->relationship('driver', 'name'),
-               Select::make('transport_association_id')
-                    ->label('Asociación de Transporte')
-                    ->native(false)
-                    ->relationship('transportAssociation', 'name')
-                    ->preload(),
+                    ->reactive(),
             ]);
     }
 }
