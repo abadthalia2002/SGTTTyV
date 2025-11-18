@@ -16,12 +16,25 @@ use Filament\Schemas\Components\Form;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
+use UnitEnum;
 
 class InternmentRecordResource extends Resource
 {
     protected static ?string $model = InternmentRecord::class;
 
-    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
+    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedWallet;
+
+    protected static string|UnitEnum|null $navigationGroup = 'Actas';
+
+    protected static ?string $recordTitleAttribute = 'Acta de Internamiento';
+
+    protected static ?string $navigationLabel = 'Acta de Internamiento';
+
+    protected static ?string $pluralLabel = 'Actas de Internamiento';
+
+    protected static ?string $modelLabel = 'Acta de Internamiento';
+
+    protected static ?int $navigationSort = 1;
 
     public static function form(Schema $schema): Schema
     {

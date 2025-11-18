@@ -2,7 +2,13 @@
 
 namespace App\Filament\Resources\InternmentRecords\Schemas;
 
+use App\Filament\Resources\Drivers\Schemas\DriverForm;
+use App\Filament\Resources\Partners\Schemas\PartnerForm;
+use App\Filament\Resources\Vehicles\Schemas\VehicleForm;
+use App\Models\Driver;
 use App\Models\InternmentRecordItem;
+use App\Models\Partner;
+use App\Models\Vehicle;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\Hidden;
 use Filament\Forms\Components\Placeholder;
@@ -34,33 +40,81 @@ class InternmentRecordForm
                     ->schema([
                         Select::make('transport_association_id')
                             ->label('Asociación de Transporte')
-                            ->relationship('transportAssociation', 'name')
+                            ->relationship(name:'transportAssociation', titleAttribute: 'name')
+                            ->searchable(['name', 'document_number'])
                             ->required()
                             ->native(false)
-                            ->searchable()
                             ->preload()
                             ->reactive()
+                            ->afterStateUpdated(function (callable $set) {
+                                // Reset socio y conductor cuando cambie la asociación
+                                $set('partner_id', null);
+                                $set('driver_id', null);
+                                $set('partner_name', null);
+                                $set('driver_name', null);
+                            })
                             ->columnSpanFull(),
 
                         Select::make('partner_id')
                             ->label('Socio / Propietario')
-                            ->relationship('partner', 'name')
+                            ->relationship(
+                                'partner',
+                                'name',
+                                fn($query, $get) =>
+                                // Filtrar socios por asociación seleccionada
+                                $query->where('transport_association_id', $get('transport_association_id'))
+                            )
+                            ->searchable(['name', 'document_number'])
                             ->required()
                             ->native(false)
-                            ->searchable()
                             ->preload()
-                            ->reactive(),
-                        TextInput::make('partner_name')->label('Nombres del socio / propietario'),
+                            ->reactive()
+                            ->disabled(
+                                fn($get) =>
+                                $get('transport_association_id') === null
+                            )
+                            ->afterStateUpdated(
+                               function (callable $set, $state) {
+                                $set('partner_name', optional(Partner::find($state))->name);
+                                $set('vehicle_id', null);
+                                
+                               }
+                            )
+                            ->createOptionForm(PartnerForm::configure(Schema::make())->getComponents()),
+
+                        TextInput::make('partner_name')
+                            ->label('Nombres del socio / propietario')
+                            ->required()
+                            ->disabled(),
 
                         Select::make('driver_id')
                             ->label('Conductor')
-                            ->relationship('driver', 'name')
+                            ->relationship(
+                                'driver',
+                                'name',
+                                fn($query, $get) =>
+                                $query->where('transport_association_id', $get('transport_association_id'))
+                            )
                             ->required()
                             ->native(false)
-                            ->searchable()
+                            ->searchable(['name', 'document_number'])
                             ->preload()
-                            ->reactive(),
-                        TextInput::make('driver_name')->label('Nombre del conductor'),
+                            ->reactive()
+                            ->disabled(
+                                fn($get) =>
+                                $get('transport_association_id') === null
+                            )
+                            ->afterStateUpdated(
+                                fn($state, callable $set) =>
+                                $set('driver_name', optional(Driver::find($state))->name)
+                            )
+                            ->createOptionForm(DriverForm::configure(Schema::make())->getComponents()),
+
+                        TextInput::make('driver_name')
+                            ->label('Nombre del conductor')
+                            ->required()
+                            ->disabled(),
+
                     ])
                     ->columnSpanFull()
                     ->columns(2),
@@ -69,26 +123,48 @@ class InternmentRecordForm
                     ->schema([
                         Select::make('vehicle_id')
                             ->label('Vehículo')
-                            ->relationship('vehicle', 'plate')
+                            ->relationship('vehicle', 'plate', function ($query, $get) {
+                                // Filtrar vehículos del socio seleccionado
+                                if ($get('partner_id')) {
+                                    $query->where('partner_id', $get('partner_id'));
+                                }
+                            })
                             ->required()
                             ->native(false)
-                            ->searchable()
+                            ->searchable(['plate'])
                             ->preload()
                             ->reactive()
-                            ->columnSpanFull(),
+                            ->disabled(
+                                fn($get) =>
+                              
+                                $get('partner_id') === null
+                            )
+                            ->afterStateUpdated(function ($state, callable $set) {
+                                
+                                 $set('plate', optional(Vehicle::find($state))->plate);
+                                 $set('brand', optional(Vehicle::find($state))->brand);
+                                 $set('vehicle_class', optional(Vehicle::find($state))->type);
+                                 $set('model', optional(Vehicle::find($state))->model);
+                            })
+                            ->columnSpanFull()
+                            ->createOptionForm(VehicleForm::configure(Schema::make())->getComponents()),
+
 
                         TextInput::make('plate')
                             ->label('Placa')
                             ->required(),
-                        TextInput::make('engine_number')->label('Número de motor'),
-                        TextInput::make('serial_number')->label('Número de serie'),
-                        TextInput::make('model')->label('Modelo'),
-                        TextInput::make('brand')->label('Marca'),
-                        TextInput::make('vehicle_class')->label('Clase de vehículo'),
-                        TextInput::make('color')->label('Color'),
-                        TextInput::make('body_type')->label('carrocería'),
-                        DatePicker::make('manufacturing_year')->format('d/m/Y')->label('Año de fabricación'),
-
+                        TextInput::make('engine_number')->label('Número de motor')->required(),
+                        TextInput::make('serial_number')->label('Número de serie')->required(),
+                        TextInput::make('model')->label('Modelo')->required(),
+                        TextInput::make('brand')->label('Marca')->required(),
+                        TextInput::make('vehicle_class')->label('Clase de vehículo')->required(),
+                        TextInput::make('color')->label('Color')->required(),
+                        TextInput::make('body_type')->label('Carrocería')->required(),
+                        DatePicker::make('manufacturing_year')
+                            ->format('d/m/Y')
+                            ->label('Año de fabricación')
+                            ->native(false)
+                            ->required(),
 
                     ])
                     ->columnSpanFull()
@@ -96,8 +172,8 @@ class InternmentRecordForm
 
                 Section::make('Infracción')
                     ->schema([
-                        TextInput::make('pnp_ticket')->label('Papeleta PNP'),
-                        TextInput::make('infraction_comisaria')->label('Infracción Comisaría'),
+                        TextInput::make('pnp_ticket')->label('Papeleta PNP')->required(),
+                        TextInput::make('infraction_comisaria')->label('Infracción Comisaría')->required(),
                         Select::make('infraction_id')
                             ->label('Infracción')
                             ->relationship('infraction', 'code')
@@ -203,7 +279,7 @@ class InternmentRecordForm
                     ->addable(false),
 
 
-                    Repeater::make('Sistema Eléctrico')
+                Repeater::make('Sistema Eléctrico')
                     ->label('')
                     ->relationship('electricalSystemsItems')
                     ->table([
@@ -247,7 +323,7 @@ class InternmentRecordForm
                     ->addable(false),
 
 
-               
+
             ]);
     }
 }
