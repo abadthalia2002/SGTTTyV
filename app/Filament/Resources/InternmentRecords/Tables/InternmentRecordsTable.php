@@ -15,46 +15,63 @@ class InternmentRecordsTable
     {
         return $table
             ->columns([
-                TextColumn::make('transport_association_id')
+                TextColumn::make('transportAssociation.name')
+                    ->label('Asociación de Transporte')
                     ->numeric()
                     ->sortable(),
                 TextColumn::make('partner_id')
                     ->numeric()
-                    ->sortable(),
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: true),
                 TextColumn::make('partner_name')
+                    ->label('Socio / Propietario')
                     ->searchable(),
                 TextColumn::make('driver_id')
                     ->numeric()
-                    ->sortable(),
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: true),
                 TextColumn::make('driver_name')
+                    ->label('Conductor')
                     ->searchable(),
                 TextColumn::make('vehicle_id')
                     ->numeric()
-                    ->sortable(),
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: true),
                 TextColumn::make('plate')
+                    ->label('Placa del Vehículo')
                     ->searchable(),
                 TextColumn::make('engine_number')
-                    ->searchable(),
+                    ->searchable()
+                    ->toggleable(isToggledHiddenByDefault: true),
                 TextColumn::make('serial_number')
-                    ->searchable(),
+                    ->searchable()
+                    ->toggleable(isToggledHiddenByDefault: true),
                 TextColumn::make('model')
+                    ->toggleable(isToggledHiddenByDefault: true)
                     ->searchable(),
                 TextColumn::make('brand')
-                    ->searchable(),
+                    ->searchable()
+                    ->toggleable(isToggledHiddenByDefault: true),
                 TextColumn::make('vehicle_class')
-                    ->searchable(),
+                    ->searchable()
+                    ->toggleable(isToggledHiddenByDefault: true),
                 TextColumn::make('color')
-                    ->searchable(),
+                    ->searchable()
+                    ->toggleable(isToggledHiddenByDefault: true),
                 TextColumn::make('body_type')
-                    ->searchable(),
+                    ->searchable()
+                    ->toggleable(isToggledHiddenByDefault: true),
                 TextColumn::make('manufacturing_year')
-                    ->searchable(),
+                    ->searchable()
+                    ->toggleable(isToggledHiddenByDefault: true),
                 TextColumn::make('pnp_ticket')
-                    ->searchable(),
+                    ->searchable()
+                    ->toggleable(isToggledHiddenByDefault: true),
                 TextColumn::make('infraction_comisaria')
-                    ->searchable(),
-                TextColumn::make('infraction_id')
-                    ->numeric()
+                    ->searchable()
+                    ->toggleable(isToggledHiddenByDefault: true),
+                TextColumn::make('infraction.code')
+                    ->label('Código de Infracción')
                     ->sortable(),
                 TextColumn::make('created_at')
                     ->dateTime()
