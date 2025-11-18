@@ -30,7 +30,7 @@ class InternmentRecord extends Model
         'observation',
     ];
 
-   
+
     public function transportAssociation(): BelongsTo
     {
         return $this->belongsTo(TransportAssociation::class);
@@ -59,5 +59,20 @@ class InternmentRecord extends Model
     public function items(): HasMany
     {
         return $this->hasMany(InternmentRecordItem::class);
+    }
+
+    public function interiorItems()
+    {
+        return $this->hasMany(InternmentRecordItem::class)->where('category', 'interior');
+    }
+
+    public function exteriorItems()
+    {
+        return $this->hasMany(InternmentRecordItem::class)->where('category', 'exterior');
+    }
+
+    public function electricalSystemsItems()
+    {
+        return $this->hasMany(InternmentRecordItem::class)->where('category', 'sitema');
     }
 }

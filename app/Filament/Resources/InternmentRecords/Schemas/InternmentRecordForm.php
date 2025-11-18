@@ -117,19 +117,18 @@ class InternmentRecordForm
 
                 Repeater::make('Aspecto Exterior')
                     ->label('')
-                    ->relationship('items')
+                    ->relationship('exteriorItems')
                     ->table([
                         TableColumn::make('Aspecto Exterior'),
                         TableColumn::make('Estado'),
-                        TableColumn::make('Categoría'),
+
                     ])
                     ->schema([
                         TextInput::make('item')
-                            ->disabled() // se muestra y se envía al backend
+                            ->disabled()
                             ->dehydrated(true)
-                            ->extraAttributes([
-                                'class' => 'border-0 p-0 bg-transparent shadow-none',
-                            ]), // lo obliga a enviarse aunque esté disabled
+                            ->label(''),
+
 
                         Radio::make('status')
                             ->options([
@@ -159,17 +158,22 @@ class InternmentRecordForm
                     ->orderColumn(false)
                     ->addable(false),
 
-                /*  Repeater::make('Aspecto Interior')
+
+                Repeater::make('Aspecto Interior')
                     ->label('')
-                     ->relationship('items') 
+                    ->relationship('interiorItems')
                     ->table([
                         TableColumn::make('Aspecto Interior'),
                         TableColumn::make('Estado'),
-                        TableColumn::make('Categoría'),
+
                     ])
                     ->schema([
-                        TextEntry::make('item'),
-                        TextEntry::make('category'),
+                        TextInput::make('item')
+                            ->disabled()
+                            ->dehydrated(true)
+                            ->label(''),
+
+
                         Radio::make('status')
                             ->options([
                                 'B' => 'B',
@@ -177,7 +181,11 @@ class InternmentRecordForm
                                 'D' => 'D',
                                 'N/T' => 'N/T',
                             ])
-                            ->inline(),
+                            ->inline()
+                            ->required()
+                            ->dehydrated(true),
+                        Hidden::make('category')
+                            ->dehydrated(true),
                     ])
                     ->default(
                         fn() =>
@@ -185,14 +193,61 @@ class InternmentRecordForm
                             ->map(fn($i) => [
                                 'item' => $i,
                                 'status' => null,
-                                'category' => 'interior',
+                                'category' => 'interior'
                             ])
                             ->toArray()
                     )
                     ->columnSpanFull()
                     ->deletable(false)
                     ->orderColumn(false)
-                    ->addable(false) */
+                    ->addable(false),
+
+
+                    Repeater::make('Sistema Eléctrico')
+                    ->label('')
+                    ->relationship('electricalSystemsItems')
+                    ->table([
+                        TableColumn::make('Sistema Eléctrico'),
+                        TableColumn::make('Estado'),
+
+                    ])
+                    ->schema([
+                        TextInput::make('item')
+                            ->disabled()
+                            ->dehydrated(true)
+                            ->label(''),
+
+
+                        Radio::make('status')
+                            ->options([
+                                'B' => 'B',
+                                'R' => 'R',
+                                'D' => 'D',
+                                'N/T' => 'N/T',
+                            ])
+                            ->inline()
+                            ->required()
+                            ->dehydrated(true),
+                        Hidden::make('category')
+                            ->dehydrated(true),
+                    ])
+                    ->default(
+                        fn() =>
+                        collect(\App\Models\InternmentRecordItem::electricalSystems())
+                            ->map(fn($i) => [
+                                'item' => $i,
+                                'status' => null,
+                                'category' => 'sitema'
+                            ])
+                            ->toArray()
+                    )
+                    ->columnSpanFull()
+                    ->deletable(false)
+                    ->orderColumn(false)
+                    ->addable(false),
+
+
+               
             ]);
     }
 }

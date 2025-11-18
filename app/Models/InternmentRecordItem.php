@@ -54,6 +54,18 @@ class InternmentRecordItem extends Model
         ];
     }
 
+    public static function electricalSystems(): array
+    {
+        return [
+            "Claxon",
+            "Flasher",
+            "Bateria",
+            "Micas luces delanteras",
+            "Micas luces posteriores",
+            "Micas luces direccionales izq."
+        ];
+    }
+
     public static function statusOptions(): array
     {
         return [
@@ -63,11 +75,9 @@ class InternmentRecordItem extends Model
             'N/T' => 'No tiene',
         ];
     }
-    
+
     public function record()
     {
         return $this->belongsTo(InternmentRecord::class, 'internment_record_id');
     }
-
-
 }
