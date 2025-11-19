@@ -28,7 +28,7 @@ class InternmentRecordResource extends Resource
 
     protected static ?string $recordTitleAttribute = 'Acta de Internamiento';
 
-    protected static ?string $navigationLabel = 'Acta de Internamiento';
+    protected static ?string $navigationLabel = 'Actas de Internamiento';
 
     protected static ?string $pluralLabel = 'Actas de Internamiento';
 

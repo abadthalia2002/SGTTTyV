@@ -1,0 +1,71 @@
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+
+class ControlRecord extends Model
+{
+    protected $fillable = [
+        'transport_association_id',
+
+        'date',
+        'time',
+        'intervention_place',
+        'name',
+        'service_mode',
+
+        // Vehículo
+        'vehicle_id',
+        'vehicle_authorization_number',
+        'vehicle_plate',
+
+        // Ruta
+        'route_origin',
+        'route_destination',
+
+        // Conductor
+        'driver_id',
+        'driver_name',
+        'driver_license_number',
+        'driver_document_number',
+        'driver_license_class',
+        'driver_license_category',
+
+        // Infracción
+        'infraction_id',
+        'infraction_code_detected',
+        'detected_non_compliance_code',
+        'verification_findings',
+
+        // Manifestación
+        'infraction_description_location',
+        'admin_statement',
+    ];
+
+    public function transportAssociation(): BelongsTo
+    {
+        return $this->belongsTo(TransportAssociation::class);
+    }
+
+    public function partner(): BelongsTo
+    {
+        return $this->belongsTo(Partner::class);
+    }
+
+    public function driver(): BelongsTo
+    {
+        return $this->belongsTo(Driver::class);
+    }
+
+    public function vehicle(): BelongsTo
+    {
+        return $this->belongsTo(Vehicle::class);
+    }
+
+    public function infraction(): BelongsTo
+    {
+        return $this->belongsTo(Infraction::class);
+    }
+}
