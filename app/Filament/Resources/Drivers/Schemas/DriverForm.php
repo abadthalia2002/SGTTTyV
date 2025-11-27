@@ -93,7 +93,14 @@ class DriverForm
                 ->label('Número de Documento')
                 ->required()
                 ->reactive()
-
+                ->unique(
+                    table: 'drivers',
+                    column: 'document_number',
+                    ignoreRecord: true,
+                   /*  modifyRuleUsing: function ($rule, callable $get) {
+                        return $rule->where('document_type_id', $get('document_type_id'));
+                    } */
+                )
                 ->rule(function (callable $get) {
                     $min = $get('number_min_length');
                     $max = $get('number_max_length');
@@ -113,7 +120,10 @@ class DriverForm
                     return ($min && $max)
                         ? "Debe tener entre {$min} y {$max} caracteres."
                         : null;
-                }),
+                })
+                ->validationMessages([
+                    'unique' => 'El número de documento ya existe para este tipo de documento.',
+                ]),
 
             TextInput::make('number_min_length')->hidden(),
             TextInput::make('number_max_length')->hidden(),

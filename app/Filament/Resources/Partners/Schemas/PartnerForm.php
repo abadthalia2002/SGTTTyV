@@ -7,6 +7,7 @@ use App\Models\DocumentType;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Schemas\Schema;
+use Illuminate\Validation\Rule;
 
 class PartnerForm
 {
@@ -38,6 +39,8 @@ class PartnerForm
                     ->label('Número de Documento')
                     ->required()
                     ->reactive()
+
+                    // Reglas dinámicas MIN/MAX/REGEX
                     ->rule(function (callable $get) {
                         $min = $get('number_min_length');
                         $max = $get('number_max_length');
@@ -50,6 +53,18 @@ class PartnerForm
 
                         return $rules;
                     })
+
+                    // 🔥 ESTA ES LA PARTE QUE RESUELVE EL PROBLEMA
+                    ->unique(
+                        table: 'partners',
+                        column: 'document_number',
+                        ignoreRecord: true,
+                       /*  modifyRuleUsing: function ($rule, callable $get) {
+                            return $rule->where('document_type_id', $get('document_type_id'));
+                        } */
+                    )
+                    // FIN SOLUCIÓN 🔥
+
                     ->helperText(function (callable $get) {
                         $min = $get('number_min_length');
                         $max = $get('number_max_length');
@@ -57,7 +72,9 @@ class PartnerForm
                         return ($min && $max)
                             ? "Debe tener entre {$min} y {$max} caracteres."
                             : null;
-                    })->validationMessages([
+                    })
+                    ->validationMessages([
+                        'unique' => 'El número de documento ya existe.',
                         'regex' => 'El número de documento no cumple con el formato requerido.',
                         'min_digits' => 'El número de documento debe tener como minimo :min dígitos.',
                         'max_digits' => 'El número de documento debe tener como máximo :max dígitos.',
