@@ -122,7 +122,7 @@ class DriverForm
                         : null;
                 })
                 ->validationMessages([
-                    'unique' => 'El número de documento ya existe para este tipo de documento.',
+                    'unique' => 'El número de documento ya existe.',
                 ]),
 
             TextInput::make('number_min_length')->hidden(),
