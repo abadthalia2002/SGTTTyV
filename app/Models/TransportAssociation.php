@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 class TransportAssociation extends Model
 {
     protected $fillable = [
+        'code',
         'document_number',
         'name',
         'description',
@@ -28,5 +29,33 @@ class TransportAssociation extends Model
     public function drivers()
     {
         return $this->hasMany(\App\Models\Driver::class);
+    }
+
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::creating(function ($model) {
+
+            $year = now()->year;
+
+            // Buscar el último code del año actual
+            $lastCode = static::where('code', 'LIKE', "%-$year")
+                ->orderBy('id', 'desc')
+                ->value('code');
+
+            if ($lastCode) {
+                // Extraer el número: "001-2025" → "001"
+                $number = intval(explode('-', $lastCode)[0]) + 1;
+            } else {
+                $number = 1;
+            }
+
+            // Formatear a 3 dígitos
+            $formatted = str_pad($number, 3, '0', STR_PAD_LEFT);
+
+            // Guardar el nuevo valor
+            $model->code = "$formatted-$year";
+        });
     }
 }

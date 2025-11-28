@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::create('transport_associations', function (Blueprint $table) {
             $table->id();
+            $table->string('code')->nullable()->unique();
             $table->string('document_number');
             $table->string('name');
             $table->text('description')->nullable();
