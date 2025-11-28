@@ -18,11 +18,17 @@ class TransportAssociationForm
                 TextInput::make('document_number')
                     ->label('RUC')
                     ->required()
+                    ->unique(
+                        table: 'transport_associations',
+                        column: 'document_number',
+                        ignoreRecord: true,
+                    )
                     ->numeric()
                     ->minLength(11)
                     ->maxLength(11)
                     ->regex('/^\d{11}$/')
                     ->validationMessages([
+                        'unique' => 'El RUC ingresado ya existe.',
                         'regex' => 'El RUC debe tener 11 dígitos numéricos.',
                         'min_digits' => 'El RUC debe tener 11 dígitos.',
                         'max_digits' => 'El RUC debe tener 11 dígitos.',
@@ -37,12 +43,29 @@ class TransportAssociationForm
                     ->label('Dirección')
                     ->required()
                     ->columnSpanFull(),
-                Select::make('partner_id')
+                /* Select::make('partner_id')
                     ->label('Representante Legal')
                     ->relationship('partner', 'name')
                     ->required()
                     ->native(false)
-                    ->createOptionForm(PartnerForm::configure(Schema::make())->getComponents()),
+                    ->createOptionForm(PartnerForm::configure(Schema::make())->getComponents()), */
+
+                Select::make('partner_id')
+                    ->label('Representante Legal')
+                    ->relationship(
+                        name: 'partner',
+                        titleAttribute: 'name',
+                        modifyQueryUsing: function ($query) {
+                            $query->whereDoesntHave('transportAssociation'); 
+                        }
+                    )
+                    ->required()
+                    ->native(false)
+                    ->createOptionForm(
+                        PartnerForm::configure(Schema::make())->getComponents()
+                    )
+
+
             ]);
     }
 }

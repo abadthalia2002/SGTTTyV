@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 class Partner extends Model
 {
     protected $fillable = [
+        'id',
         'document_type_id',
         'document_number',
         'name',
