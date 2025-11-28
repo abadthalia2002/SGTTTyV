@@ -59,7 +59,7 @@ class PartnerForm
                         table: 'partners',
                         column: 'document_number',
                         ignoreRecord: true,
-                       /*  modifyRuleUsing: function ($rule, callable $get) {
+                        /*  modifyRuleUsing: function ($rule, callable $get) {
                             return $rule->where('document_type_id', $get('document_type_id'));
                         } */
                     )
@@ -107,10 +107,21 @@ class PartnerForm
 
                 Select::make('transport_association_id')
                     ->label('Asociación de Transporte')
-                    ->relationship('transportAssociation', 'name')
+                    ->relationship(
+                        name: 'transportAssociation',
+                        titleAttribute: 'name',
+                        modifyQueryUsing: fn($query) =>
+                        $query->withCount([
+                            'partners' => fn($q) =>
+                            $q->whereNull('deleted_at')  // 👈 socios NO eliminados
+                        ])
+                            ->having('partners_count', '<', 50)
+                    )
                     ->searchable()
                     ->preload()
-                    ->reactive(),
+                    ->reactive()
+
+
             ]);
     }
 }
