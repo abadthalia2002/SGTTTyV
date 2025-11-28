@@ -55,8 +55,20 @@ class TransportAssociationForm
                     ->relationship(
                         name: 'partner',
                         titleAttribute: 'name',
-                        modifyQueryUsing: function ($query) {
-                            $query->whereDoesntHave('transportAssociation'); 
+                        modifyQueryUsing: function ($query, callable $get) {
+
+                            $currentPartner = $get('partner_id');
+
+                            $query->where(function ($q) use ($currentPartner) {
+
+                                // Partners que NO tienen asociación
+                                $q->whereNull('transport_association_id');
+
+                                // En edición → incluir el actualmente asignado
+                                if ($currentPartner) {
+                                    $q->orWhere('id', $currentPartner);
+                                }
+                            });
                         }
                     )
                     ->required()
