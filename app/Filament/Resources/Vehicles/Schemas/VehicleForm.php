@@ -16,6 +16,14 @@ class VehicleForm
             ->components([
                 TextInput::make('plate')
                     ->label('Número de Placa')
+                    ->unique(
+                        table: 'vehicles',
+                        column: 'plate',
+                        ignoreRecord: true,
+                    )
+                    ->validationMessages([
+                        'unique' => 'El número de placa ya existe.',
+                    ])
                     ->required(),
                 TextInput::make('brand')
                     ->label('Marca')
