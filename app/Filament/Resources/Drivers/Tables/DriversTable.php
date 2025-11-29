@@ -7,6 +7,7 @@ use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
 use Filament\Actions\ViewAction;
 use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
 
 class DriversTable
@@ -45,7 +46,12 @@ class DriversTable
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
-                //
+                SelectFilter::make('association')
+                    ->label('Asociación')
+                    ->relationship('transportAssociation', 'name')
+                    ->searchable(['name', 'document_number'])
+                    ->preload()
+                    ->emptyRelationshipOptionLabel('No hay asociaciones')
             ])
             ->recordActions([
                 ViewAction::make(),
