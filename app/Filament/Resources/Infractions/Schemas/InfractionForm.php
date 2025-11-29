@@ -25,11 +25,15 @@ class InfractionForm
                     ->required(),
                 Textarea::make('description')
                     ->required()
-                     ->label('Descripción')
+                    ->label('Descripción')
                     ->columnSpanFull(),
                 Select::make('type')
-                    ->options(TypeInfractionEnum::class)
-                    ->label('Tipo'),
+                    ->options(
+                        collect(TypeInfractionEnum::cases())
+                            ->mapWithKeys(fn($case) => [$case->value => $case->value])
+                    )
+                    ->label('Tipo')
+                    ->native(false),
                 TextInput::make('sanction_percentage')
                     ->label('Porcentaje de sanción')
                     ->required()
