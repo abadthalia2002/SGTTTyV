@@ -112,8 +112,8 @@ class PartnerForm
                         titleAttribute: 'name',
                         modifyQueryUsing: fn($query) =>
                         $query->withCount([
-                            'partners' => fn($q) =>
-                            $q->whereNull('deleted_at')  // 👈 socios NO eliminados
+                            'partners' /* => fn($q) =>
+                            $q->whereNull('deleted_at')  */ // 👈 socios NO eliminados
                         ])
                             ->having('partners_count', '<', 50)
                     )
