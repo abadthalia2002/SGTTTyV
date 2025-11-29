@@ -4,7 +4,7 @@ namespace App\Enums;
 
 enum TypeInfractionEnum: string
 {
-    case MUY_GRAVE = 'muy grave';
-    case GRAVE = 'grave';
-    case LEVE = 'leve';
+    case MUY_GRAVE = 'Muy Grave';
+    case GRAVE = 'Grave';
+    case LEVE = 'Leve';
 }

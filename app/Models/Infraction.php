@@ -15,6 +15,7 @@ class Infraction extends Model
         'type',
         'sanction_percentage',
         'complementary_measure',
+        'amount',
     ];
 
     protected $casts = [

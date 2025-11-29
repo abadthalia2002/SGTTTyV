@@ -19,6 +19,7 @@ return new class extends Migration
             $table->string('type');          
             $table->decimal('sanction_percentage', 5, 2);
             $table->string('complementary_measure')->nullable();
+            $table->decimal('amount', 10, 2)->nullable();
             $table->timestamps();
         });
     }
