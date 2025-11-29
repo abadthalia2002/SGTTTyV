@@ -9,3 +9,6 @@ Route::get('/', function () {
 });
 
 Route::get('/pdf/generate/internment-record/{internmentRecordId}', [PdfController::class, 'gneratePdfInternmentRecord'])->name('pdf.example');
+
+
+Route::get('/pdf/generate/transport-association/{associationId}', [PdfController::class, 'generatePdfAssociation'])->name('pdf.transport-association');

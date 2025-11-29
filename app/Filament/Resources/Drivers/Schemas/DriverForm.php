@@ -27,20 +27,24 @@ class DriverForm
 
             Select::make('partner_id')
                 ->label('Socio')
-                ->options(function (callable $get) {
+                ->options(function (callable $get, $record) {
                     $associationId = $get('transport_association_id');
 
-                    // ⚠️ Si no ha elegido asociación, no mostramos nada
                     if (!$associationId) {
                         return [];
                     }
 
-                    // 🔍 Traer solo socios de la asociación seleccionada
-                    // que aún no estén registrados como conductores
-                    return Partner::where('transport_association_id', $associationId)
-                        ->whereDoesntHave('driver') // 👈 socio sin conductor asignado
-                        ->pluck('name', 'id');
+                    $query = Partner::where('transport_association_id', $associationId)
+                        ->whereDoesntHave('driver');
+
+                   
+                    if ($record && $record->partner_id) {
+                        $query->orWhere('id', $record->partner_id);
+                    }
+
+                    return $query->pluck('name', 'id');
                 })
+
                 ->searchable()
                 ->preload()
                 ->reactive()

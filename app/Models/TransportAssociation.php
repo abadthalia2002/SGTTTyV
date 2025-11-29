@@ -31,6 +31,11 @@ class TransportAssociation extends Model
         return $this->hasMany(\App\Models\Driver::class);
     }
 
+    public function vehicles()
+    {
+        return $this->hasMany(\App\Models\Vehicle::class);
+    }
+
     protected static function boot()
     {
         parent::boot();
