@@ -9,6 +9,7 @@ use Filament\Actions\Action;
 use Filament\Actions\EditAction;
 use Filament\Infolists\Components\RepeatableEntry;
 use Filament\Infolists\Components\TextEntry;
+use Filament\Notifications\Notification;
 use Filament\Resources\Pages\ViewRecord;
 use Filament\Schemas\Components\Tabs;
 use Filament\Schemas\Components\Tabs\Tab;
@@ -22,13 +23,34 @@ class ViewTransportAssociation extends ViewRecord
         return [
             EditAction::make(),
             Action::make('Generar PDF')
-                ->label('Generar Permiso de Operaicón')
+                ->label('Generar Permiso de Operación')
                 ->requiresConfirmation()
-                ->url(
+                /* ->url(
                     fn() => route('pdf.transport-association', ['associationId' => $this->record]),
                     shouldOpenInNewTab: true,
 
-                )
+                ) */
+                ->action(function ($record, $livewire) {
+
+                    // Validar cantidad mínima de socios
+                    if ($record->partners()->count() < 11) {
+
+                        Notification::make()
+                            ->title('No se puede generar el permiso de operación')
+                            ->body("La asociación debe tener al menos 11 socios para generar el Permiso de Operación.")
+                            ->danger()
+                            ->send();
+
+                        return; // 👉 NO CONTINÚA
+                    }
+
+                    // Si pasa validación, abrir PDF en nueva pestaña
+                    $url = route('pdf.transport-association', ['associationId' => $record->id]);
+
+                    $livewire->js(
+                        "window.open('{$url}', '_blank')"
+                    );
+                })
         ];
     }
 
