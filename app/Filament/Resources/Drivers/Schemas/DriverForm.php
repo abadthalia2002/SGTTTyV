@@ -152,10 +152,19 @@ class DriverForm
             TextInput::make('license_number')
                 ->label('Número de Licencia')
                 ->required()
+                ->unique(
+                        table: 'drivers',
+                        column: 'license_number',
+                        ignoreRecord: true,
+                    )
+                    ->validationMessages([
+                        'unique' => 'El número de licencia ya existe.',
+                    ])
 
-                ->helperText('Ejemplo válido: A-123456, AIIA-12345678')
+                /* ->helperText('Ejemplo válido: A-123456, AIIA-12345678') */
                 ->validationMessages([
                     'regex' => 'El formato del número de licencia no es válido.',
+                    'unique' => 'El número de licencia ya existe.',
                 ]),
 
         ]);
