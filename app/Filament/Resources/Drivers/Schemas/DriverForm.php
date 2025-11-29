@@ -148,7 +148,7 @@ class DriverForm
             TextInput::make('license_number')
                 ->label('Número de Licencia')
                 ->required()
-                ->regex('/^[A-Z0-9\-]{2,5}\-\d{6,8}$/')
+
                 ->helperText('Ejemplo válido: A-123456, AIIA-12345678')
                 ->validationMessages([
                     'regex' => 'El formato del número de licencia no es válido.',
