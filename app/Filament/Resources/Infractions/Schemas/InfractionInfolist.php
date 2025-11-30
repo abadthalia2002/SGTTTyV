@@ -17,6 +17,9 @@ class InfractionInfolist
                 TextEntry::make('type'),
                 TextEntry::make('sanction_percentage')
                     ->numeric(),
+                TextEntry::make('amount')
+                    ->prefix('S/. ')
+                    ->numeric(),
                 TextEntry::make('complementary_measure')
                     ->placeholder('-'),
                 TextEntry::make('created_at')
