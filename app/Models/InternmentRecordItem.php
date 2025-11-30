@@ -5,9 +5,12 @@ namespace App\Models;
 use App\Enums\InternmentRecordItemCategory;
 use App\Enums\InternmentRecordItemStatus;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class InternmentRecordItem extends Model
 {
+    use SoftDeletes;
+    
     protected $fillable = [
         'internment_record_id',
         'category',
