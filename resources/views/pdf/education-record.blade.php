@@ -44,16 +44,8 @@
             font-weight: bold;
         }
 
-        .sign-table td {
-            text-align: center;
-            padding-top: 40px;
-        }
 
-        .sign-line {
-            border-top: 1px solid #000;
-            width: 80%;
-            margin: 0 auto 3px auto;
-        }
+
 
         .label-small {
             font-size: 11px;
@@ -97,7 +89,7 @@
 
     <table border="1">
         <tr class="section-title">
-            <td colspan="6">DATOS DEL CONDUCTOR</td>
+            <td colspan="2">DATOS DEL CONDUCTOR</td>
         </tr>
 
         <tr>
@@ -123,7 +115,7 @@
     <!-- LICENCIA -->
     <table border="1">
         <tr class="section-title">
-            <td colspan="6">LICENCIA DE CONDUCIR</td>
+            <td colspan="4">LICENCIA DE CONDUCIR</td>
         </tr>
 
         <tr>
@@ -141,30 +133,31 @@
     </table>
 
     <!-- DATOS DEL VEHÍCULO -->
-
     <table border="1">
-         <tr class="section-title">
-            <td colspan="6">DATOS DEL VEHÍCULO</td>
+        <tr class="section-title">
+            <td colspan="4">DATOS DEL VEHÍCULO</td>
         </tr>
-        <tr >
-            <td colspan="2" >PLACA:<br><span class="line">{{ $record->vehicle_plate }}</span></td>
-            <td colspan="2">N° DE MOTOR:<br><span class="line">{{ $record->engine_number }}</span></td>
-        </tr>
+
         <tr>
-            <td colspan="2" >CLASE:<br><span class="line">{{ $record->vehicle_class }}</span></td>
-            <td colspan="2" >MARCA:<br><span class="line">{{ $record->vehicle_brand }}</span></td>
+            <td>PLACA:<br><span class="line">{{ $record->vehicle_plate }}</span></td>
+            <td>N° DE MOTOR:<br><span class="line">{{ $record->engine_number }}</span></td>
+            <td>CLASE:<br><span class="line">{{ $record->vehicle_class }}</span></td>
+            <td>MARCA:<br><span class="line">{{ $record->vehicle_brand }}</span></td>
         </tr>
-        <tr colspan="2">
+
+        <tr>
             <td>N° DE TARJETA:<br><span class="line">{{ $record->vehicle_registration_number }}</span></td>
             <td>COLOR:<br><span class="line">{{ $record->vehicle_color }}</span></td>
             <td>F. INSCRIP.:<br><span class="line">{{ $record->registration_date }}</span></td>
+            <td></td>
         </tr>
     </table>
 
+
     <!-- PROPIETARIO -->
     <table border="1">
-         <tr class="section-title">
-            <td colspan="6">DATOS DEL PROPIETARIO</td>
+        <tr class="section-title">
+            <td colspan="2">DATOS DEL PROPIETARIO</td>
         </tr>
 
         <tr>
@@ -219,10 +212,10 @@
     <table border="1">
         <tr>
             <td>
-            <br>    
-            {{ $record->additional_information }}
-        <br>
-        </td>
+                <br>
+                {{ $record->additional_information }}
+                <br>
+            </td>
         </tr>
     </table>
 
@@ -231,18 +224,18 @@
     <table border="1">
         <tr>
             <td>
-            <br>
-            
-            {{ $record->driver_observations }}
-            <br>
-        </td>
+                <br>
+
+                {{ $record->driver_observations }}
+                <br>
+            </td>
         </tr>
     </table>
 
     <br><br>
 
     <!-- FIRMAS -->
-      <table class="sign-table">
+    <table style="width:100%; border:none;">
         <tr class="no-border">
             <td class="signature-cell" style="text-align:center;">
                 <br>
@@ -261,7 +254,7 @@
                 <br>
                 ________________________ <br>
                 FIRMA DEL PNP <br>
-                 <br>
+                <br>
                 Nombres y Apellidos:<br><br>
                 ________________________<br><br>
                 ________________________ <br><br>
@@ -273,7 +266,7 @@
                 <br>
                 ________________________ <br>
                 FIRMA DEL INTERVENIDO <br>
-                 <br>
+                <br>
                 Nombres y Apellidos:<br><br>
                 ________________________<br><br>
                 ________________________ <br><br>
@@ -281,8 +274,8 @@
             </td>
         </tr>
     </table>
-    
-  <!--   <table class="sign-table">
+
+    <!--   <table class="sign-table">
         <tr>
             <td>
                 <div class="sign-line"></div>

@@ -59,8 +59,8 @@ class PdfController extends Controller
             'record' => $record
         ]);
 
-      /*   return $pdf->download('acta-educacion.pdf'); */
-
-         return view('pdf.education-record', compact('record'));  
+       return $pdf->download('acta-educacion.pdf'); 
+/* 
+         return view('pdf.education-record', compact('record'));   */
     }
 }
