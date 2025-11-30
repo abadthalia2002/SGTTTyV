@@ -30,6 +30,11 @@ class InfractionsTable
                 TextColumn::make('complementary_measure')
                     ->label('Medida complementaria')
                     ->searchable(),
+                TextColumn::make('amount')
+                    ->label('Monto')
+                    ->prefix('S/. ')
+                    ->numeric()
+                    ->sortable(),
                 TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()
