@@ -162,6 +162,7 @@ class ControlRecordForm
                             ->disabled()
                             ->dehydrated(true),
                         Textarea::make('service_mode')
+                        ->label('Modalidad del servicio')
                             ->columnSpanFull(),
                     ])
                     ->columns(2)

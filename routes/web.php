@@ -12,3 +12,7 @@ Route::get('/pdf/generate/internment-record/{internmentRecordId}', [PdfControlle
 
 
 Route::get('/pdf/generate/transport-association/{associationId}', [PdfController::class, 'generatePdfAssociation'])->name('pdf.transport-association');
+
+
+Route::get('/pdf/generate/control-record/{controlRecordId}', [PdfController::class, 'generatePdfControlRecord'])->name('pdf.control-record');
+

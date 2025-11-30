@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\ControlRecord;
 use App\Models\InternmentRecord;
 use App\Models\TransportAssociation;
 use Illuminate\Http\Request;
@@ -31,5 +32,20 @@ class PdfController extends Controller
         ]);
 
         return $pdf->download('permiso-operacion.pdf');
+    }
+
+
+    public function generatePdfControlRecord($controlRecordId)
+    {
+        $record = ControlRecord::with(['driver', 'vehicle', 'partner'])
+            ->findOrFail($controlRecordId);
+
+        $pdf = Pdf::loadView('pdf.control-record', [
+            'record' => $record
+        ]);
+
+        return $pdf->download('acta-control.pdf');
+
+        /* return view('pdf.control-record', compact('record'));  */
     }
 }
