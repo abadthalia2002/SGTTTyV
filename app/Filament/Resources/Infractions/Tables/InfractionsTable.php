@@ -2,11 +2,13 @@
 
 namespace App\Filament\Resources\Infractions\Tables;
 
+use App\Enums\TargetInfractionEnum;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
 use Filament\Actions\ViewAction;
 use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
 
 class InfractionsTable
@@ -38,7 +40,13 @@ class InfractionsTable
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
-                //
+                SelectFilter::make('target')
+                    ->label('Dirigido a')
+                    ->options(
+                        collect(TargetInfractionEnum::cases())
+                            ->mapWithKeys(fn($case) => [$case->value => ucfirst($case->value)])
+                    )
+
             ])
             ->recordActions([
                 ViewAction::make(),
