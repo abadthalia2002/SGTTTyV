@@ -15,10 +15,24 @@ use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
+use UnitEnum;
 
 class EducationRecordResource extends Resource
 {
     protected static ?string $model = EducationRecord::class;
+
+
+    protected static string|UnitEnum|null $navigationGroup = 'Actas';
+
+    protected static ?string $recordTitleAttribute = 'Acta de Educación';
+
+    protected static ?string $navigationLabel = 'Actas de Educación';
+
+    protected static ?string $pluralLabel = 'Actas de Educación';
+
+    protected static ?string $modelLabel = 'Acta de Educación';
+
+    protected static ?int $navigationSort = 3;
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
 
