@@ -16,3 +16,5 @@ Route::get('/pdf/generate/transport-association/{associationId}', [PdfController
 
 Route::get('/pdf/generate/control-record/{controlRecordId}', [PdfController::class, 'generatePdfControlRecord'])->name('pdf.control-record');
 
+Route::get('/pdf/generate/education-record/{educationRecordId}', [PdfController::class, 'generatePdfEducationRecord'])->name('pdf.education-record');
+
