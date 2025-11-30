@@ -20,6 +20,7 @@ return new class extends Migration
             $table->integer('number_max_length');
             $table->text('number_regex')->nullable();
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

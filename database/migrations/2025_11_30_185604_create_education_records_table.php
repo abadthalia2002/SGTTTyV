@@ -65,6 +65,7 @@ return new class extends Migration
             $table->text('driver_observations')->nullable();
 
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

@@ -35,6 +35,7 @@ return new class extends Migration
 
             $table->text('observation')->nullable()->comment('Observación');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

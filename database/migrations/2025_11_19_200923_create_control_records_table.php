@@ -43,11 +43,16 @@ return new class extends Migration
             $table->string('infraction_code_detected')->nullable(); // código detectado
             $table->string('detected_non_compliance_code')->nullable();
             $table->string('verification_findings')->nullable(); // descripción del infracción
-            
+
             // Manifestación
             $table->text('infraction_description_location')->nullable(); // descripción y ubicación del local
             $table->text('admin_statement')->nullable(); // manifestación administrativa
+
+            $table->string('status')->nullable();
+            $table->decimal('payment_amount', 10, 2)->nullable();
+            
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

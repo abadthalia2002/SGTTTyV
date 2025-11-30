@@ -21,6 +21,7 @@ return new class extends Migration
             $table->foreignId('driver_id')->nullable()->constrained();
             $table->foreignId('transport_association_id')->constrained();
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

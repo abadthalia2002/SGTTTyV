@@ -21,6 +21,7 @@ return new class extends Migration
             $table->foreignId('partner_id')->nullable()->constrained();
             $table->foreignId('transport_association_id')->nullable()->constrained();
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

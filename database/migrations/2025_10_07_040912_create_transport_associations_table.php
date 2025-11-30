@@ -20,6 +20,7 @@ return new class extends Migration
             $table->text('location')->nullable();
             $table->foreignId('partner_id')->nullable()->constrained('partners');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 
