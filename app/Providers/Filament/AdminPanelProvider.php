@@ -32,9 +32,6 @@ class AdminPanelProvider extends PanelProvider
             ->brandName('SGTTyV')
             ->brandLogo(asset('logo.png'))
             ->brandLogoHeight('5rem')
-            ->styles([
-            'login-background' => asset('css/login-background.css'),
-            ])
             ->colors([
                 'primary' => Color::Blue,
             ])
