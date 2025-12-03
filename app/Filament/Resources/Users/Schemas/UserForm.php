@@ -82,19 +82,35 @@ class UserForm
                     ->email()
                     ->required(),
                 DateTimePicker::make('email_verified_at')->label('Email Verificado'),
-                
+
                 TextInput::make('password')
                     ->label('Contraseña')
                     ->password()
-                    ->hidden(fn($context) => $context === 'create') // ocultar al crear
-                    ->required(false) // nunca obligatorio
-                    ->dehydrated(fn($state) => filled($state)) // solo guardar si escriben algo
-                    ->afterStateHydrated(function ($set, $record) {
-                        if ($record) {
-                            $set('password', ''); // mostrar vacío al editar
+                    ->revealable()
+                    ->hidden(fn($context) => $context === 'create')
+                    ->required(false)
+                    ->dehydrateStateUsing(fn($state) => filled($state) ? bcrypt($state) : null)
+                    ->dehydrated(fn($state) => filled($state))
+                    ->afterStateHydrated(fn($set, $record) => $set('password', ''))
+                    ->helperText('Deje en blanco si no desea cambiar la contraseña.')
+                    ->rule(function ($get) {
+                        if (! filled($get('password'))) {
+                            return null; // No validar si no se ingresó nada
                         }
+
+                        return [
+                            'min:8',
+                            'regex:/[A-Z]/',
+                            'regex:/[a-z]/',
+                            'regex:/[0-9]/',
+                            'regex:/[\W_]/',
+                        ];
                     })
-                    ->helperText('Deje en blanco si no desea cambiar la contraseña.'),
+                    ->validationMessages([
+                        'min'   => 'La contraseña debe tener al menos 8 caracteres.',
+                        'regex' => 'La contraseña debe incluir mayúsculas, minúsculas, números y símbolos.',
+                    ]),
+
 
                 TextInput::make('address')
                     ->label('Dirección'),
