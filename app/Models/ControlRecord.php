@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use App\Enums\StatusControlRecordEnum;
 
 class ControlRecord extends Model
 {
@@ -45,6 +46,13 @@ class ControlRecord extends Model
         // Manifestación
         'infraction_description_location',
         'admin_statement',
+
+        'payment_amount',
+        'status',
+    ];
+
+    protected $casts = [
+        'status' => StatusControlRecordEnum::class,
     ];
 
     public function transportAssociation(): BelongsTo

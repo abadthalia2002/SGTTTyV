@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\ControlRecords\Schemas;
 
+use App\Enums\StatusControlRecordEnum;
 use App\Filament\Resources\Drivers\Schemas\DriverForm;
 use App\Filament\Resources\Vehicles\Schemas\VehicleForm;
 use App\Models\Driver;
@@ -158,11 +159,12 @@ class ControlRecordForm
                             ->label('Número de habilitación vehicular'),
 
                         TextInput::make('vehicle_plate')
+                            ->label('Placa del vehículo')
                             ->required()
                             ->disabled()
                             ->dehydrated(true),
                         Textarea::make('service_mode')
-                        ->label('Modalidad del servicio')
+                            ->label('Modalidad del servicio')
                             ->columnSpanFull(),
                     ])
                     ->columns(2)
@@ -170,7 +172,6 @@ class ControlRecordForm
 
                 Section::make('Infracción')
                     ->schema([
-
                         Select::make('infraction_id')
                             ->label('Infracción')
                             ->relationship('infraction', 'code')
@@ -178,7 +179,17 @@ class ControlRecordForm
                             ->native(false)
                             ->searchable()
                             ->preload()
-                            ->reactive(),
+                            ->reactive()
+                            ->afterStateUpdated(function ($state, callable $set) {
+                                if ($state) {
+                                    $infraction = \App\Models\Infraction::find($state);
+
+                                    if ($infraction) {
+                                        $set('payment_amount', $infraction->amount);
+                                    }
+                                }
+                            }),
+
 
                         TextInput::make('infraction_code_detected')
                             ->required()
@@ -206,6 +217,31 @@ class ControlRecordForm
                 Textarea::make('admin_statement')
                     ->label('Manifestación del Administrativo')
                     ->columnSpanFull(),
+
+
+                TextInput::make('payment_amount')
+                    ->label('Monto por pagar')
+                    ->numeric()
+                    ->prefix('S/')
+                    ->rule('min:0')
+                    ->disabled()
+                    ->dehydrated(true)
+                    ->required(),
+
+
+
+                Select::make('status')
+                    ->label('Estado de Pago')
+                    ->options(
+                        collect(StatusControlRecordEnum::cases())
+                            ->mapWithKeys(fn($case) => [$case->value => $case->label()])
+                            ->toArray()
+                    )
+                    ->default(StatusControlRecordEnum::PENDIENTE->value)
+                    ->required(),
+
+
+
             ]);
     }
 }
