@@ -34,7 +34,7 @@ class UserResource extends Resource
     protected static ?string $pluralLabel = 'Usuarios';
 
     protected static ?string $modelLabel = 'Usuario';
-    
+
     public static function form(Schema $schema): Schema
     {
         return UserForm::configure($schema);
@@ -65,5 +65,12 @@ class UserResource extends Resource
             'view' => ViewUser::route('/{record}'),
             'edit' => EditUser::route('/{record}/edit'),
         ];
+    }
+    
+    public static function afterCreate($record, $data): void
+    {
+        if (isset($data['role'])) {
+            $record->assignRole($data['role']);
+        }
     }
 }

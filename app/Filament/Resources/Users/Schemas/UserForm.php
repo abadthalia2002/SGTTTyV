@@ -37,7 +37,7 @@ class UserForm
                             $documentType = DocumentType::find($state);
 
                             if ($documentType) {
-                                
+
                                 $set('number_min_length', $documentType->number_min_length);
                                 $set('number_max_length', $documentType->number_max_length);
                                 $set('number_regex', $documentType->number_regex);
@@ -73,7 +73,7 @@ class UserForm
                 TextInput::make('number_min_length')->hidden(),
                 TextInput::make('number_max_length')->hidden(),
                 TextInput::make('number_regex')->hidden(),
-                
+
                 TextInput::make('name')
                     ->label('Nombres y Apellidos')
                     ->required(),
@@ -82,18 +82,37 @@ class UserForm
                     ->email()
                     ->required(),
                 DateTimePicker::make('email_verified_at')->label('Email Verificado'),
+                
                 TextInput::make('password')
                     ->label('Contraseña')
                     ->password()
-                    ->required(),
+                    ->hidden(fn($context) => $context === 'create') // ocultar al crear
+                    ->required(false) // nunca obligatorio
+                    ->dehydrated(fn($state) => filled($state)) // solo guardar si escriben algo
+                    ->afterStateHydrated(function ($set, $record) {
+                        if ($record) {
+                            $set('password', ''); // mostrar vacío al editar
+                        }
+                    })
+                    ->helperText('Deje en blanco si no desea cambiar la contraseña.'),
+
                 TextInput::make('address')
                     ->label('Dirección'),
                 TextInput::make('phone')
                     ->label('Teléfono')
                     ->tel(),
+
+                Select::make('roles')
+                    ->relationship('roles', 'name')
+                    ->required()
+                    ->multiple()
+                    ->preload()
+                    ->searchable(),
+
                 FileUpload::make('image')
                     ->label('Foto')
                     ->image(),
+
             ]);
     }
 }
