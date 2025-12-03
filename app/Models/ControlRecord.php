@@ -10,7 +10,7 @@ use App\Enums\StatusControlRecordEnum;
 class ControlRecord extends Model
 {
     use SoftDeletes;
-    
+
     protected $fillable = [
         'transport_association_id',
 
@@ -78,5 +78,14 @@ class ControlRecord extends Model
     public function infraction(): BelongsTo
     {
         return $this->belongsTo(Infraction::class);
+    }
+
+    public static function lastRecordsForDriver($driverId, $days = 30, $limit = 3)
+    {
+        return self::where('driver_id', $driverId)
+            ->where('created_at', '>=', now()->subDays($days))
+            ->latest('created_at')
+            ->take($limit)
+            ->get();
     }
 }

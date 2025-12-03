@@ -8,11 +8,15 @@ use App\Filament\Resources\Vehicles\Schemas\VehicleForm;
 use App\Models\Driver;
 use App\Models\Vehicle;
 use Filament\Forms\Components\DatePicker;
+use Filament\Forms\Components\Placeholder;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TimePicker;
+use Filament\Forms\Components\Toggle;
+use Filament\Infolists\Components\TextEntry;
 use Filament\Schemas\Components\Grid;
+use Filament\Schemas\Components\Group;
 use Filament\Schemas\Components\Section;
 use Filament\Schemas\Schema;
 use PhpParser\Node\Expr\FuncCall;
@@ -24,216 +28,278 @@ class ControlRecordForm
         return $schema
             ->components([
 
-                Section::make('Información Principal')
+                Group::make()
                     ->schema([
-                        Select::make('transport_association_id')
-                            ->label('Asociación de Transporte')
-                            ->relationship(name: 'transportAssociation', titleAttribute: 'name')
-                            ->searchable(['name', 'document_number'])
-                            ->required()
-                            ->native(false)
-                            ->preload()
-                            ->reactive()
-                            ->afterStateUpdated(function (callable $set) {
-                                // Reset socio y conductor cuando cambie la asociación
-                                $set('partner_id', null);
-                                $set('driver_id', null);
-                                $set('partner_name', null);
-                                $set('driver_name', null);
-                            })
+
+                        Section::make('Información Principal')
+                            ->schema([
+                                Select::make('transport_association_id')
+                                    ->label('Asociación de Transporte')
+                                    ->relationship(name: 'transportAssociation', titleAttribute: 'name')
+                                    ->searchable(['name', 'document_number'])
+                                    ->required()
+                                    ->native(false)
+                                    ->preload()
+                                    ->reactive()
+                                    ->afterStateUpdated(function (callable $set) {
+                                        // Reset socio y conductor cuando cambie la asociación
+                                        $set('partner_id', null);
+                                        $set('driver_id', null);
+                                        $set('partner_name', null);
+                                        $set('driver_name', null);
+                                    })
+                                    ->columnSpanFull(),
+                                TextInput::make('name')
+                                    ->required()
+                                    ->label('Nombre / Razón Social'),
+
+                                TextInput::make('intervention_place')
+                                    ->required()
+                                    ->label('Lugar de la intervención'),
+
+                                DatePicker::make('date')
+                                    ->format('Y-m-d')
+                                    ->native(false)
+                                    ->required(),
+
+                                TimePicker::make('time')
+                                    ->format('H:i')
+                                    ->native(false)
+                                    ->required(),
+
+                            ])
+                            ->columns(2),
+
+
+                        Section::make('Información del conductor')
+                            ->schema([
+
+                                Select::make('driver_id')
+                                    ->label('Conductor')
+                                    ->relationship(
+                                        'driver',
+                                        'name',
+                                        fn($query, $get) =>
+                                        $query->where('transport_association_id', $get('transport_association_id'))
+                                    )
+                                    ->required()
+                                    ->native(false)
+                                    ->searchable(['name', 'document_number'])
+                                    ->preload()
+                                    ->reactive()
+                                    ->disabled(
+                                        fn($get) =>
+                                        $get('transport_association_id') === null
+                                    )
+                                    ->afterStateUpdated(
+                                        function ($state, callable $set) {
+                                            $set('driver_name', optional(Driver::find($state))->name);
+                                            $set('driver_license_number', optional(Driver::find($state))->license_number);
+                                            $set('driver_document_number', optional(Driver::find($state))->document_number);
+                                            $set('driver_license_class', optional(Driver::find($state))->license_type);
+                                        }
+
+                                    )
+                                    ->createOptionForm(DriverForm::configure(Schema::make())->getComponents()),
+
+                                TextInput::make('driver_name')
+                                    ->label('Nombres y Apellidos')
+                                    ->required()
+                                    ->disabled()
+                                    ->dehydrated(true),
+
+                                TextInput::make('driver_license_number')
+                                    ->label('Número de Licencia')
+                                    ->required()
+                                    ->disabled()
+                                    ->dehydrated(true),
+                                TextInput::make('driver_document_number')
+                                    ->label('DNI')
+                                    ->required()
+                                    ->disabled()
+                                    ->dehydrated(true),
+                                TextInput::make('driver_license_class')
+                                    ->label('Tipo de Licencia')
+                                    ->required()
+                                    ->disabled()
+                                    ->dehydrated(true),
+
+                                /*  TextInput::make('driver_license_category'), */
+
+                            ])
+                            ->columns(2)
                             ->columnSpanFull(),
-                        TextInput::make('name')
-                            ->required()
-                            ->label('Nombre / Razón Social'),
 
-                        TextInput::make('intervention_place')
-                            ->required()
-                            ->label('Lugar de la intervención'),
+                        Section::make('Información Vehicular')
+                            ->schema([
 
-                        DatePicker::make('date')
-                            ->format('Y-m-d')
-                            ->native(false)
-                            ->required(),
-
-                        TimePicker::make('time')
-                            ->format('H:i')
-                            ->native(false)
-                            ->required(),
-
-                    ])
-                    ->columns(2)
-                    ->columnSpanFull(),
-
-
-                Section::make('Información del conductor')
-                    ->schema([
-
-                        Select::make('driver_id')
-                            ->label('Conductor')
-                            ->relationship(
-                                'driver',
-                                'name',
-                                fn($query, $get) =>
-                                $query->where('transport_association_id', $get('transport_association_id'))
-                            )
-                            ->required()
-                            ->native(false)
-                            ->searchable(['name', 'document_number'])
-                            ->preload()
-                            ->reactive()
-                            ->disabled(
-                                fn($get) =>
-                                $get('transport_association_id') === null
-                            )
-                            ->afterStateUpdated(
-                                function ($state, callable $set) {
-                                    $set('driver_name', optional(Driver::find($state))->name);
-                                    $set('driver_license_number', optional(Driver::find($state))->license_number);
-                                    $set('driver_document_number', optional(Driver::find($state))->document_number);
-                                    $set('driver_license_class', optional(Driver::find($state))->license_type);
-                                }
-
-                            )
-                            ->createOptionForm(DriverForm::configure(Schema::make())->getComponents()),
-
-                        TextInput::make('driver_name')
-                            ->label('Nombres y Apellidos')
-                            ->required()
-                            ->disabled()
-                            ->dehydrated(true),
-
-                        TextInput::make('driver_license_number')
-                            ->label('Número de Licencia')
-                            ->required()
-                            ->disabled()
-                            ->dehydrated(true),
-                        TextInput::make('driver_document_number')
-                            ->label('DNI')
-                            ->required()
-                            ->disabled()
-                            ->dehydrated(true),
-                        TextInput::make('driver_license_class')
-                            ->label('Tipo de Licencia')
-                            ->required()
-                            ->disabled()
-                            ->dehydrated(true),
-
-                        /*  TextInput::make('driver_license_category'), */
-
-                    ])
-                    ->columns(2)
-                    ->columnSpanFull(),
-
-                Section::make('Información Vehicular')
-                    ->schema([
-
-                        Select::make('vehicle_id')
-                            ->label('Vehículo')
-                            ->relationship('vehicle', 'plate', function ($query, $get) {
-                                // Filtrar vehículos del socio seleccionado
-                                if ($get('driver_id')) {
-                                    $query->where('driver_id', $get('driver_id'));
-                                }
-                            })
-                            ->required()
-                            ->native(false)
-                            ->searchable(['plate'])
-                            ->preload()
-                            ->reactive()
-                            /*  ->disabled(
+                                Select::make('vehicle_id')
+                                    ->label('Vehículo')
+                                    ->relationship('vehicle', 'plate', function ($query, $get) {
+                                        // Filtrar vehículos del socio seleccionado
+                                        if ($get('driver_id')) {
+                                            $query->where('driver_id', $get('driver_id'));
+                                        }
+                                    })
+                                    ->required()
+                                    ->native(false)
+                                    ->searchable(['plate'])
+                                    ->preload()
+                                    ->reactive()
+                                    /*  ->disabled(
                                 fn($get) =>
 
                                 $get('partner_id') === null
                             ) */
-                            ->afterStateUpdated(function ($state, callable $set) {
+                                    ->afterStateUpdated(function ($state, callable $set) {
 
-                                $set('vehicle_plate', optional(Vehicle::find($state))->plate);
-                                $set('brand', optional(Vehicle::find($state))->brand);
-                                $set('vehicle_class', optional(Vehicle::find($state))->type);
-                                $set('model', optional(Vehicle::find($state))->model);
-                            })
-                            ->columnSpanFull()
-                            ->createOptionForm(VehicleForm::configure(Schema::make())->getComponents()),
+                                        $set('vehicle_plate', optional(Vehicle::find($state))->plate);
+                                        $set('brand', optional(Vehicle::find($state))->brand);
+                                        $set('vehicle_class', optional(Vehicle::find($state))->type);
+                                        $set('model', optional(Vehicle::find($state))->model);
+                                    })
+                                    ->columnSpanFull()
+                                    ->createOptionForm(VehicleForm::configure(Schema::make())->getComponents()),
 
-                        TextInput::make('vehicle_authorization_number')
-                            ->label('Número de habilitación vehicular'),
+                                TextInput::make('vehicle_authorization_number')
+                                    ->label('Número de habilitación vehicular')
+                                    ->columnSpanFull(true),
 
-                        TextInput::make('vehicle_plate')
-                            ->label('Placa del vehículo')
-                            ->required()
-                            ->disabled()
-                            ->dehydrated(true),
-                        Textarea::make('service_mode')
-                            ->label('Modalidad del servicio')
+                                TextInput::make('vehicle_plate')
+                                    ->label('Placa del vehículo')
+                                    ->required()
+                                    ->disabled()
+                                    ->dehydrated(true)
+                                    ->columnSpanFull(true),
+
+                                Textarea::make('service_mode')
+                                    ->label('Modalidad del servicio')
+                                    ->columnSpanFull(),
+                            ])
+                            ->columns(3)
                             ->columnSpanFull(),
+
+                        Section::make('Infracción')
+                            ->schema([
+                                Select::make('infraction_id')
+                                    ->label('Infracción')
+                                    ->relationship('infraction', 'code')
+                                    ->required()
+                                    ->native(false)
+                                    ->searchable()
+                                    ->preload()
+                                    ->reactive()
+                                    ->afterStateUpdated(function ($state, callable $set) {
+                                        if ($state) {
+                                            $infraction = \App\Models\Infraction::find($state);
+
+                                            if ($infraction) {
+                                                $set('payment_amount', $infraction->amount);
+                                            }
+                                        }
+                                    }),
+                                TextInput::make('infraction_code_detected')
+                                    ->required()
+                                    ->label('Código de Infracción Detectado'),
+                                TextInput::make('detected_non_compliance_code')
+                                    ->required()
+                                    ->label('Código de Incumplimiento Detectado'),
+                            ]),
+
+                        Section::make('Información adicional')
+                            ->schema([
+                                TextInput::make('route_origin')
+                                    ->required()
+                                    ->label('Ruta en la que se presta el servicio al ser intervenido origen'),
+                                TextInput::make('route_destination')
+                                    ->required()
+                                    ->label('Destino'),
+                            ]),
+                        Textarea::make('verification_findings')
+                            ->label('Producto de Verificación se detectó lo siguiente')
+                            ->columnSpanFull(),
+                        Textarea::make('infraction_description_location')
+                            ->label('Descripción y Ubicación del Local')
+                            ->columnSpanFull(),
+                        Textarea::make('admin_statement')
+                            ->label('Manifestación del Administrativo')
+                            ->columnSpanFull(),
+
+                        TextInput::make('payment_amount')
+                            ->label('Monto por pagar')
+                            ->numeric()
+                            ->prefix('S/')
+                            ->rule('min:0')
+                            ->disabled()
+                            ->dehydrated(true)
+                            ->required(),
+
+                        Select::make('status')
+                            ->label('Estado del Pago')
+                            ->options(
+                                collect(StatusControlRecordEnum::cases())
+                                    ->mapWithKeys(fn($case) => [$case->value => $case->label()])
+                                    ->toArray()
+                            )
+                            ->default(StatusControlRecordEnum::PENDIENTE->value)
+                            ->required(),
+
                     ])
-                    ->columns(2)
-                    ->columnSpanFull(),
+                    ->columnSpan(['lg' => 2]),
 
-                Section::make('Infracción')
+                Group::make()
                     ->schema([
-                        Select::make('infraction_id')
-                            ->label('Infracción')
-                            ->relationship('infraction', 'code')
-                            ->required()
-                            ->native(false)
-                            ->searchable()
-                            ->preload()
-                            ->reactive()
-                            ->afterStateUpdated(function ($state, callable $set) {
-                                if ($state) {
-                                    $infraction = \App\Models\Infraction::find($state);
 
-                                    if ($infraction) {
-                                        $set('payment_amount', $infraction->amount);
-                                    }
-                                }
-                            }),
-                        TextInput::make('infraction_code_detected')
-                            ->required()
-                            ->label('Código de Infracción Detectado'),
-                        TextInput::make('detected_non_compliance_code')
-                            ->required()
-                            ->label('Código de Incumplimiento Detectado'),
-                    ]),
 
-                Section::make('Información adicional')
-                    ->schema([
-                        TextInput::make('route_origin')
-                            ->required()
-                            ->label('Ruta en la que se presta el servicio al ser intervenido origen'),
-                        TextInput::make('route_destination')
-                            ->required()
-                            ->label('Destino'),
-                    ]),
-                Textarea::make('verification_findings')
-                    ->label('Producto de Verificación se detectó lo siguiente')
-                    ->columnSpanFull(),
-                Textarea::make('infraction_description_location')
-                    ->label('Descripción y Ubicación del Local')
-                    ->columnSpanFull(),
-                Textarea::make('admin_statement')
-                    ->label('Manifestación del Administrativo')
-                    ->columnSpanFull(),
 
-                TextInput::make('payment_amount')
-                    ->label('Monto por pagar')
-                    ->numeric()
-                    ->prefix('S/')
-                    ->rule('min:0')
-                    ->disabled()
-                    ->dehydrated(true)
-                    ->required(),
 
-                Select::make('status')
-                    ->label('Estado del Pago')
-                    ->options(
-                        collect(StatusControlRecordEnum::cases())
-                            ->mapWithKeys(fn($case) => [$case->value => $case->label()])
-                            ->toArray()
-                    )
-                    ->default(StatusControlRecordEnum::PENDIENTE->value)
-                    ->required(),
-            ]);
+                        Section::make('Recurrente')
+                            ->schema([
+                                TextEntry::make('last_record_info')
+                                    ->label('Últimos registros')
+                                    ->placeholder('No hay registros en los últimos 30 días')
+                                    ->state(function ($get) {
+
+                                        $driverId = $get('driver_id');
+                                        if (!$driverId) {
+                                            return null;
+                                        }
+
+                                        $records = \App\Models\ControlRecord::lastRecordsForDriver($driverId, 30, 3);
+
+                                        if ($records->isEmpty()) {
+                                            return null;
+                                        }
+
+                                        // Armar lista textual
+                                        $output = "";
+                                        foreach ($records as $i => $r) {
+                                            $num = $i + 1;
+
+                                            $output .= "{$num}. El {$r->date} en {$r->intervention_place}, " .
+                                                "se detectó la infracción {$r->infraction_code_detected}, " .
+                                                "se registró un pago de S/ {$r->payment_amount} " .
+                                                "y el estado del pago es {$r->status->value}.\n";
+                                        }
+
+                                        return trim($output);
+                                    })
+                                    ->columnSpanFull()
+                                    ->reactive(),
+
+                            ]),
+
+                        /*  Section::make('Associations')
+                            ->schema([
+
+                                Select::make('categories')
+                                    ->relationship('categories', 'name')
+                                    ->multiple()
+                                    ->required(),
+                            ]), */
+                    ])
+                    ->columnSpan(['lg' => 1]),
+
+            ])->columns(3);
     }
 }
