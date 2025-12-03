@@ -29,6 +29,12 @@ class AdminPanelProvider extends PanelProvider
             ->id('admin')
             ->path('admin')
             ->login()
+            ->brandName('SGTTyV')
+            ->brandLogo(asset('logo.png'))
+            ->brandLogoHeight('5rem')
+            ->styles([
+            'login-background' => asset('css/login-background.css'),
+            ])
             ->colors([
                 'primary' => Color::Blue,
             ])
@@ -40,7 +46,7 @@ class AdminPanelProvider extends PanelProvider
             ->discoverWidgets(in: app_path('Filament/Widgets'), for: 'App\Filament\Widgets')
             ->widgets([
                 AccountWidget::class,
-               /*  FilamentInfoWidget::class, */
+                /*  FilamentInfoWidget::class, */
             ])
             ->middleware([
                 EncryptCookies::class,
@@ -55,9 +61,9 @@ class AdminPanelProvider extends PanelProvider
             ])
             ->plugins([
                 FilamentShieldPlugin::make()
-                 ->navigationGroup('Roles y Permisos')
-                 ->navigationGroup('Autenticación')
-                 ->navigationSort(10)
+                    ->navigationGroup('Roles y Permisos')
+                    ->navigationGroup('Autenticación')
+                    ->navigationSort(10)
             ])
             ->authMiddleware([
                 Authenticate::class,
