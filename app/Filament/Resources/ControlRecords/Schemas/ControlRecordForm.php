@@ -189,8 +189,6 @@ class ControlRecordForm
                                     }
                                 }
                             }),
-
-
                         TextInput::make('infraction_code_detected')
                             ->required()
                             ->label('Código de Infracción Detectado'),
@@ -218,7 +216,6 @@ class ControlRecordForm
                     ->label('Manifestación del Administrativo')
                     ->columnSpanFull(),
 
-
                 TextInput::make('payment_amount')
                     ->label('Monto por pagar')
                     ->numeric()
@@ -228,10 +225,8 @@ class ControlRecordForm
                     ->dehydrated(true)
                     ->required(),
 
-
-
                 Select::make('status')
-                    ->label('Estado de Pago')
+                    ->label('Estado del Pago')
                     ->options(
                         collect(StatusControlRecordEnum::cases())
                             ->mapWithKeys(fn($case) => [$case->value => $case->label()])
@@ -239,9 +234,6 @@ class ControlRecordForm
                     )
                     ->default(StatusControlRecordEnum::PENDIENTE->value)
                     ->required(),
-
-
-
             ]);
     }
 }
