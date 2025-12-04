@@ -4,11 +4,14 @@ namespace App\Filament\Resources\Infractions\Tables;
 
 use App\Enums\TargetInfractionEnum;
 use Filament\Actions\BulkActionGroup;
+use Filament\Actions\DeleteAction;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
+use Filament\Actions\RestoreAction;
 use Filament\Actions\ViewAction;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\SelectFilter;
+use Filament\Tables\Filters\TrashedFilter;
 use Filament\Tables\Table;
 
 class InfractionsTable
@@ -50,12 +53,15 @@ class InfractionsTable
                     ->options(
                         collect(TargetInfractionEnum::cases())
                             ->mapWithKeys(fn($case) => [$case->value => ucfirst($case->value)])
-                    )
+                    ),
+                TrashedFilter::make(),
 
             ])
             ->recordActions([
                 ViewAction::make(),
                 EditAction::make(),
+                DeleteAction::make(),
+                RestoreAction::make(),
             ])
             ->toolbarActions([
                 BulkActionGroup::make([

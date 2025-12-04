@@ -4,11 +4,14 @@ namespace App\Filament\Resources\Partners\Tables;
 
 use App\Models\TransportAssociation;
 use Filament\Actions\BulkActionGroup;
+use Filament\Actions\DeleteAction;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
+use Filament\Actions\RestoreAction;
 use Filament\Actions\ViewAction;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\SelectFilter;
+use Filament\Tables\Filters\TrashedFilter;
 use Filament\Tables\Table;
 
 class PartnersTable
@@ -59,24 +62,28 @@ class PartnersTable
                     ->relationship('transportAssociation', 'name')
                     ->searchable(['name', 'document_number'])
                     ->preload()
-                    ->emptyRelationshipOptionLabel('No hay asociaciones')
+                    ->emptyRelationshipOptionLabel('No hay asociaciones'),
+                TrashedFilter::make(),
             ])
             ->recordActions([
                 ViewAction::make(),
                 EditAction::make(),
+                DeleteAction::make(),
+                RestoreAction::make(),
             ])
             ->toolbarActions([
                 BulkActionGroup::make([
+
                     DeleteBulkAction::make(),
                 ]),
             ])
             ->defaultSort(function ($query) {
-            return $query->orderBy(
-                \App\Models\TransportAssociation::select('name')
-                    ->whereColumn('transport_associations.id', 'partners.transport_association_id')
-                    ->limit(1),
-                'asc'
-            );
-        });
+                return $query->orderBy(
+                    \App\Models\TransportAssociation::select('name')
+                        ->whereColumn('transport_associations.id', 'partners.transport_association_id')
+                        ->limit(1),
+                    'asc'
+                );
+            });
     }
 }
